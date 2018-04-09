@@ -18,8 +18,9 @@ const db = pgp(configuration);
 // TODO add query functions
 function getKeywordSimilarity(req, res, next) {
     let keyword = req.query.keyword;
+    let results = parseInt(req.query.results);
 
-    db.any('SELECT keyword FROM keyword AS k INNER JOIN google_vecs AS v ON k.keyword = v.word INNER JOIN google_vecs AS w ON w.word = $1 ORDER BY cosine_similarity(w.vector, v.vector) DESC FETCH FIRST 10 ROWS ONLY', keyword)
+    db.any('SELECT keyword FROM keyword AS k INNER JOIN google_vecs AS v ON k.keyword = v.word INNER JOIN google_vecs AS w ON w.word = $1 ORDER BY cosine_similarity(w.vector, v.vector) DESC FETCH FIRST $2 ROWS ONLY', [keyword, results])
         .then(function (data) {
             res.status(200)
                 .json({
