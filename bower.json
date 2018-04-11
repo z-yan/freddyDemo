@@ -1,0 +1,18 @@
+{
+  "name": "freddydemo",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Zdravko Yanakiev <zdravko.yanakiev@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/z-yan/freddyDemo",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
