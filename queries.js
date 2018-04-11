@@ -1,9 +1,11 @@
+// use bluebird as promise library
 const promise = require('bluebird');
 
 const options = {
     promiseLib: promise
 };
 
+// connect to db
 const pgp = require('pg-promise')(options);
 const configuration = {
     host: 'localhost',
@@ -14,8 +16,16 @@ const configuration = {
 };
 const db = pgp(configuration);
 
-// cosine similarity: requires keyword and number of results
-// TODO different tables
+/*
+FREDDY UDFs
+*/
+
+/**
+ * Keyword similarity query.
+ * @param {string} keyword - Keyword to find similarities for.
+ * @param {int} results - Number of results.
+ */
+// TODO use other tables than keywords?
 function getKeywordSimilarity(req, res, next) {
     let keyword = req.query.keyword;
     let results = parseInt(req.query.results);
@@ -34,13 +44,21 @@ function getKeywordSimilarity(req, res, next) {
         });
 }
 
-// kNN queries
+/**
+ * kNN query.
+ * @param {string} title - Title to find nearest neighbours for.
+ * @param {string} index - Index to use.
+ * @param {int} results - Number of results.
+ * @param {string} usePv - Use post-verification or not.
+ */
+// TODO rename title parameter?
 function getKnn(req, res, next) {
     let title = req.query.title;
     let index = req.query.index;
     let results = parseInt(req.query.results);
-    let udf = useIndex(index);
     let usePv = req.query.use_pv === 'true' ? '_pv' : '';
+
+    let udf = useIndex(index);
 
     db.any('SELECT t.word, t.squaredistance FROM ' + udf + usePv + '($1, $2) AS t ORDER BY t.squaredistance DESC', [title, results])
         .then(function (data) {
@@ -56,6 +74,11 @@ function getKnn(req, res, next) {
         });
 }
 
+/**
+ * kNN batch query.
+ * @param {string[]} array - Array of strings to find kNN for.
+ * @param {int} k - Number of neighbours.
+ */
 function getKnnBatch(req, res, next) {
     let array = JSON.parse(req.query.array);
     let k = req.query.k;
@@ -74,6 +97,14 @@ function getKnnBatch(req, res, next) {
         });
 }
 
+/**
+ * kNN Query with specific output set.
+ * @param {string} title - Title to find nearest neighbours for.
+ * @param {int} results - Number of results.
+ * @param {string[]} outputSet - Array of strings describing output set.
+ * @param {string} usePq - Use PQ index or not.
+ */
+// TODO use other tables than movies?
 function getKnnIn(req, res, next) {
     let title = req.query.title;
     let results = parseInt(req.query.results);
@@ -94,11 +125,19 @@ function getKnnIn(req, res, next) {
         });
 }
 
+/**
+ * Analogy query. Find token which is to arg3 as arg2 is to arg1.
+ * @param {string} arg1 - First argument.
+ * @param {string} arg2 - Second argument.
+ * @param {string} arg3 - Third argument.
+ * @param {string} index - Index to use.
+ */
 function getAnalogy(req, res, next) {
     let arg1 = req.query.arg1;
     let arg2 = req.query.arg2;
     let arg3 = req.query.arg3;
     let index = req.query.index;
+
     let udf = useIndex(index);
 
     db.any('SELECT * FROM analogy_3cosadd' + udf + '($1, $2, $3)', [arg1, arg2, arg3])
@@ -115,6 +154,14 @@ function getAnalogy(req, res, next) {
         });
 }
 
+/**
+ * Analogy query with specific output set.
+ * @param {string} arg1 - First argument.
+ * @param {string} arg2 - Second argument.
+ * @param {string} arg3 - Third argument.
+ * @param {string[]} outputSet - Array of strings describing output set.
+ * @param {string} usePq - Use PQ index or not.
+ */
 function getAnalogyIn(req, res, next) {
     let arg1 = req.query.arg1;
     let arg2 = req.query.arg2;
@@ -136,6 +183,12 @@ function getAnalogyIn(req, res, next) {
         });
 }
 
+/**
+ * Grouping query.
+ * @param {string[]} tokens - Array of input tokens.
+ * @param {string[]} groupTokens - Array of grouping tokens.
+ * @param {string} usePq - Use PQ index or not.
+ */
 function getGrouping(req, res, next) {
     let tokens = JSON.parse(req.query.tokens);
     let groupTokens = JSON.parse(req.query.group_tokens);
