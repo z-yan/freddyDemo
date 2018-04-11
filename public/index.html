@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:ng="http://angularjs.org" ng-app>
+<html xmlns:ng="http://angularjs.org" ng-app="freddyDemo">
     <head>
         <meta charset="UTF-8">
         <title>FREDDY Demo App</title>
         <link rel="stylesheet" src="/bower_components/bootstrap/dist/css/bootstrap.css"/>
     </head>
     <body>
-        <script src="/bower_components/angular/angular.min.js"></script>
+        <div class="view-container">
+            <div ng-view class="view-frame"></div>
+        </div>
+
+        <script src="/bower_components/angular/angular.js"></script>
         <script src="/bower_components/angular-resource/angular-resource.js"></script>
         <script src="/bower_components/angular-route/angular-route.js"></script>
+        <script src="/app/app.module.js"></script>
+        <script src="/app/app.config.js"></script>
+        <script src="/app/components/prototype/prototype.module.js"></script>
+        <script src="/app/components/prototype/prototype.component.js"></script>
     </body>
 </html>

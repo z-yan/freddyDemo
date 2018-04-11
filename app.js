@@ -17,9 +17,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// routes setup
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
+app.use('/app',  express.static(__dirname + '/app'));
 app.use('/', indexRouter);
+
+app.all('/*', function(req, res, next) {
+    res.sendFile('index.html', { root: __dirname + '/public'});
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
