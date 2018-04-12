@@ -5,17 +5,23 @@
         <title>FREDDY Demo App</title>
         <link rel="stylesheet" src="/bower_components/bootstrap/dist/css/bootstrap.css"/>
     </head>
-    <body>
-        <div class="view-container">
-            <div ng-view class="view-frame"></div>
-        </div>
+    <body ng-controller="prototypeController">
+        Keyword: <input ng-model="keyword"/>
+        <br/>
+        Results no.: <input ng-model="results"/>
+        <br/>
+        <button ng-click="getRequest()">Test</button>
+        <p>
+        <ul>
+            <li ng-repeat="keyword in similarity">
+                {{ keyword.keyword }}
+            </li>
+        </ul>
+        </p>
 
         <script src="/bower_components/angular/angular.js"></script>
         <script src="/bower_components/angular-resource/angular-resource.js"></script>
         <script src="/bower_components/angular-route/angular-route.js"></script>
-        <script src="/app/app.module.js"></script>
-        <script src="/app/app.config.js"></script>
-        <script src="/app/components/prototype/prototype.module.js"></script>
-        <script src="/app/components/prototype/prototype.component.js"></script>
+        <script src="/app/app.js"></script>
     </body>
 </html>
