@@ -1,10 +1,11 @@
 let freddyDemo = angular.module('freddyDemo', [
-    'ngRoute'
+    'ngRoute',
+    'ui.bootstrap'
 ]);
 
 freddyDemo.controller('prototypeController', function ($scope, $http) {
     $scope.getRequest = function () {
-        $http.get('http://localhost:3000/api/similarity?keyword=' + $scope.keyword + '&results=' + $scope.results)
+        $http.get('http://141.76.47.127:3000/api/similarity?keyword=' + $scope.keyword + '&results=' + $scope.results)
             .then(function successCallback(response) {
                 $scope.similarity = response.data.data;
             }, function errorCallback(response) {
