@@ -4,26 +4,11 @@
         <meta charset="UTF-8">
         <title>FREDDY Demo App</title>
         <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+        <base href="/">
     </head>
-    <body ng-controller="prototypeController">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm">
-                    Keyword: <input ng-model="keyword"/>
-                    <br/>
-                    Results no.: <input ng-model="results"/>
-                    <br/>
-                    <button ng-click="getRequest()" class="btn btn-primary">Test</button>
-                </div>
-                <div class="col-sm">
-                    <ul>
-                        <li ng-repeat="keyword in similarity">
-                            {{ keyword.keyword }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <body>
+
+        <div ng-view></div>
 
         <!--TODO: replace with minimal versions-->
         <script src="/bower_components/angular/angular.js"></script>

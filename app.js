@@ -23,7 +23,7 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 app.use('/app',  express.static(__dirname + '/app'));
 app.use('/', indexRouter);
 
-app.all('/*', function(req, res, next) {
+app.all('/*', function(req, res) {
     res.sendFile('index.html', { root: __dirname + '/public'});
 });
 

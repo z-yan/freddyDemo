@@ -1,7 +1,18 @@
-let freddyDemo = angular.module('freddyDemo', [
+const freddyDemo = angular.module('freddyDemo', [
     'ngRoute',
     'ui.bootstrap'
 ]);
+
+freddyDemo.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+    $routeProvider
+        .when("/", {
+            templateUrl: '/app/test.html',
+            controller: 'prototypeController'
+        })
+        .otherwise({redirectTo: '/'});
+
+    $locationProvider.html5Mode(true);
+}]);
 
 freddyDemo.controller('prototypeController', function ($scope, $http) {
     $scope.getRequest = function () {

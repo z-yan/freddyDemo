@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            Keyword: <input ng-model="keyword"/>
+            <br/>
+            Results no.: <input ng-model="results"/>
+            <br/>
+            <button ng-click="getRequest()" class="btn btn-primary">Test</button>
+        </div>
+        <div class="col-sm">
+            <ul>
+                <li ng-repeat="keyword in similarity">
+                    {{ keyword.keyword }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
