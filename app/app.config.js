@@ -4,10 +4,11 @@ angular.module('freddyDemo')
         $routeProvider
             .when("/", {
                 templateUrl: '/app/main.html',
+                controller: 'MainController'
             })
             .when("/test", {
                 templateUrl: '/app/test.html',
-                controller: 'prototypeController'
+                controller: 'PrototypeController'
             })
             .otherwise({redirectTo: '/'});
 
