@@ -4,17 +4,6 @@ const freddyDemo = angular.module('freddyDemo', [
     'hljs'
 ]);
 
-// Configure routes
-freddyDemo.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-    $routeProvider
-        .when("/", {
-            templateUrl: '/app/main.html',
-        })
-        .otherwise({redirectTo: '/'});
-
-    $locationProvider.html5Mode(true);
-}]);
-
 freddyDemo.controller('MainController', function ($scope) {
     $scope.isSettingsCollapsed = true;
     $scope.isQueriesCollapsed = true;
