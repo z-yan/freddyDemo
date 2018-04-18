@@ -26,8 +26,9 @@
                     Choose DB <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="db-button">
-                    <li role="menuitem"><a href="#">IMDb</a></li>
-                    <li role="menuitem"><a href="#">Discogs</a></li>
+                    <li role="menuitem" ng-repeat="db in dbOptions" ng-click="updateTableList(db)">
+                        <a href="#">{{ db }}</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -46,14 +47,12 @@
 
     <div class="row form-group">
         <div class="col-md-2 col-lg-2">
-            <div class="well well-lg">
-                List of tables:
-                <ul>
-                    <li>Table 1</li>
-                    <li>Table 2</li>
-                    <li>Table 3</li>
-                    <li>Table 4</li>
-                    <li>Table 5</li>
+            <div class="">
+                <h4>Tables in DB '{{ selectedDb }}':</h4>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="table in tables">
+                        {{ table.tablename }}
+                    </li>
                 </ul>
             </div>
         </div>
