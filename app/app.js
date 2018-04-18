@@ -1,6 +1,7 @@
 const freddyDemo = angular.module('freddyDemo', [
     'ngRoute',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'hljs'
 ]);
 
 // Configure routes
