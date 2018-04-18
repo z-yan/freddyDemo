@@ -1,0 +1,26 @@
+{
+  "name": "freddydemo",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Zdravko Yanakiev <zdravko.yanakiev@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/z-yan/freddyDemo",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.9",
+    "angular-resource": "^1.6.9",
+    "angular-route": "^1.6.9",
+    "bootstrap": "3.3.7",
+    "angular-bootstrap": "^2.5.0",
+    "angular-highlightjs": "^0.7.1"
+  }
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" ng-app="freddyDemo">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+
+        <link rel="stylesheet" href="stylesheets/style.css"/>
+
+        <link rel="stylesheet" href="highlight/styles/default.css"/>
+        <script src="highlight/highlight.pack.js"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+        <base href="/">
+
+        <title>FREDDY Demo App</title>
+    </head>
+    <body>
+
+        <div ng-view></div>
+
+        <!--TODO: replace with minimal versions-->
+        <script src="/bower_components/angular/angular.js"></script>
+        <script src="/bower_components/angular-resource/angular-resource.js"></script>
+        <script src="/bower_components/angular-route/angular-route.js"></script>
+        <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="/bower_components/angular-highlightjs/angular-highlightjs.min.js"></script>
+        <script src="/app/app.js"></script>
+        <script src="/app/app.config.js"></script>
+    </body>
+</html>

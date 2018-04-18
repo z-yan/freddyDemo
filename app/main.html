@@ -1,0 +1,65 @@
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">FREDDY Demo App</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="#">Abstract</a></li>
+            <li><a href="#">Demo</a></li>
+        </ul>
+        <button class="btn btn-default navbar-btn pull-right" ng-click="isSettingsCollapsed = !isSettingsCollapsed">
+            <span class="glyphicon glyphicon-cog" style="vertical-align: middle;"></span> Settings
+        </button>
+    </div>
+</nav>
+
+<div class="container-fluid" uib-collapse="isSettingsCollapsed">
+    <!-- TODO -->
+    <div class="well well-lg">Settings go here: Indices, PV, Vectors...</div>
+</div>
+
+<div class="container-fluid">
+    <div class="row form-group">
+        <div class="col-md-2 col-lg-2">
+            <div class="btn-group" uib-dropdown>
+                <button id="db-button" type="button" class="btn btn-primary btn-block" uib-dropdown-toggle>
+                    Choose DB <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="db-button">
+                    <li role="menuitem" ng-repeat="db in dbOptions" ng-click="updateTableList(db)">
+                        <a href="#">{{ db }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10 col-lg-10">
+            <button id="query-button" type="button" class="btn btn-primary btn-block"
+                    ng-click="isQueriesCollapsed = !isQueriesCollapsed">
+                Select SQL query <span class="caret"></span></button>
+            <div uib-collapse="isQueriesCollapsed" class="well clearfix">
+                List of queries...
+                <button class="btn btn-danger pull-right">
+                    Execute <span class="glyphicon glyphicon-play"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <div class="col-md-2 col-lg-2">
+            <div class="">
+                <h4>Tables in DB '{{ selectedDb }}':</h4>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="table in tables">
+                        {{ table.tablename }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10 col-lg-10">
+            <div class="well well-lg">
+                Query results...
+            </div>
+        </div>
+    </div>
+</div>
