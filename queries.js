@@ -5,16 +5,25 @@ const options = {
     promiseLib: promise
 };
 
-// connect to db
+// connect to dbs
 const pgp = require('pg-promise')(options);
-const configuration = {
+const imdbConfiguration = {
     host: 'localhost',
     port: 5432,
     database: 'demo_database',
     user: 'demo_user',
     password: '2\\a{KWvix_<M9%63',
 };
-const db = pgp(configuration);
+const imdb = pgp(imdbConfiguration);
+
+const discogsConfiguration = {
+    host: 'localhost',
+    port: 5432,
+    database: 'discogs',
+    user: 'demo_user',
+    password: '2\\a{KWvix_<M9%63',
+};
+const discogs = pgp(discogsConfiguration);
 
 /*
 FREDDY UDFs
@@ -30,7 +39,7 @@ function getKeywordSimilarity(req, res, next) {
     let keyword = req.query.keyword;
     let results = parseInt(req.query.results);
 
-    db.any('SELECT keyword FROM keyword AS k INNER JOIN google_vecs AS v ON k.keyword = v.word INNER JOIN google_vecs AS w ON w.word = $1 ORDER BY cosine_similarity(w.vector, v.vector) DESC FETCH FIRST $2 ROWS ONLY', [keyword, results])
+    imdb.any('SELECT keyword FROM keyword AS k INNER JOIN google_vecs AS v ON k.keyword = v.word INNER JOIN google_vecs AS w ON w.word = $1 ORDER BY cosine_similarity(w.vector, v.vector) DESC FETCH FIRST $2 ROWS ONLY', [keyword, results])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -60,7 +69,7 @@ function getKnn(req, res, next) {
 
     let udf = useIndex(index);
 
-    db.any('SELECT t.word, t.squaredistance FROM ' + udf + usePv + '($1, $2) AS t ORDER BY t.squaredistance DESC', [title, results])
+    imdb.any('SELECT t.word, t.squaredistance FROM ' + udf + usePv + '($1, $2) AS t ORDER BY t.squaredistance DESC', [title, results])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -83,7 +92,7 @@ function getKnnBatch(req, res, next) {
     let array = JSON.parse(req.query.array);
     let k = req.query.k;
 
-    db.any('SELECT * FROM k_nearest_neighbour_ivfadc_batch($1, $2)', [array, k])
+    imdb.any('SELECT * FROM k_nearest_neighbour_ivfadc_batch($1, $2)', [array, k])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -111,7 +120,7 @@ function getKnnIn(req, res, next) {
     let outputSet = JSON.parse(req.query.output_set);
     let usePq = useIndex(req.query.use_pq);
 
-    db.any('SELECT * FROM knn_in' + usePq + '($1, $2, $3)', [title, results, outputSet])
+    imdb.any('SELECT * FROM knn_in' + usePq + '($1, $2, $3)', [title, results, outputSet])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -140,7 +149,7 @@ function getAnalogy(req, res, next) {
 
     let udf = useIndex(index);
 
-    db.any('SELECT * FROM analogy_3cosadd' + udf + '($1, $2, $3)', [arg1, arg2, arg3])
+    imdb.any('SELECT * FROM analogy_3cosadd' + udf + '($1, $2, $3)', [arg1, arg2, arg3])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -169,7 +178,7 @@ function getAnalogyIn(req, res, next) {
     let outputSet = JSON.parse(req.query.output_set);
     let usePq = useIndex(req.query.use_pq);
 
-    db.any('SELECT result FROM analogy_3cosadd_in' + usePq + '($1, $2, $3, $4::varchar(100)[])', [arg1, arg2, arg3, outputSet])
+    imdb.any('SELECT result FROM analogy_3cosadd_in' + usePq + '($1, $2, $3, $4::varchar(100)[])', [arg1, arg2, arg3, outputSet])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -194,13 +203,38 @@ function getGrouping(req, res, next) {
     let groupTokens = JSON.parse(req.query.group_tokens);
     let usePq = useIndex(req.query.use_pq);
 
-    db.any('SELECT token, grouptoken FROM grouping_func' + usePq + '($1, $2)', [tokens, groupTokens])
+    imdb.any('SELECT token, grouptoken FROM grouping_func' + usePq + '($1, $2)', [tokens, groupTokens])
         .then(function (data) {
             res.status(200)
                 .json({
                     status: 'success',
                     data: data,
                     message: 'Retrieved token grouping'
+                });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
+function getTables(req, res, next) {
+    let dbName = req.query.db;
+    let db;
+
+    if (dbName === 'discogs') {
+        db = discogs;
+    }
+    else {
+        db = imdb;
+    }
+
+    db.any('SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != \'pg_catalog\' AND schemaname != \'information_schema\'')
+        .then(function (data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    data: data,
+                    message: 'Retrieved tables'
                 });
         })
         .catch(function (err) {
@@ -231,5 +265,6 @@ module.exports = {
     getKnnIn: getKnnIn,
     getAnalogy: getAnalogy,
     getAnalogyIn: getAnalogyIn,
-    getGrouping: getGrouping
+    getGrouping: getGrouping,
+    getTables: getTables
 };
