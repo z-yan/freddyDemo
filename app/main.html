@@ -23,7 +23,7 @@
         <div class="col-md-2 col-lg-2">
             <div class="btn-group" uib-dropdown>
                 <button id="db-button" type="button" class="btn btn-primary btn-block" uib-dropdown-toggle>
-                    Choose DB <span class="caret"></span>
+                    {{ selectedDb }} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="db-button">
                     <li role="menuitem" ng-repeat="db in dbOptions" ng-click="updateTableList(db)">
@@ -48,7 +48,7 @@
     <div class="row form-group">
         <div class="col-md-2 col-lg-2">
             <div class="">
-                <h4>Tables in DB '{{ selectedDb }}':</h4>
+                <h4>Tables in schema</h4>
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="table in tables">
                         {{ table.tablename }}

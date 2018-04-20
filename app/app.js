@@ -23,7 +23,7 @@ freddyDemo.controller('MainController', function ($scope, $http) {
             });
     };
 
-    $scope.updateTableList('imdb');
+    $scope.updateTableList($scope.selectedDb);
 });
 
 
