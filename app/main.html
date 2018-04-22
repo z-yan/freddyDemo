@@ -27,24 +27,33 @@
                         {{ selectedDb }} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="db-button">
-                        <li role="menuitem" ng-repeat="db in dbOptions" ng-click="updateTableList(db)">
+                        <li role="menuitem" ng-repeat="db in dbOptions" ng-click="getTableList(db)">
                             <a href="#">{{ db }}</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
+
         <div class="col-md-10 col-lg-10">
-            <button id="query-button" type="button" class="btn btn-primary btn-block"
-                    ng-click="isQueriesCollapsed = !isQueriesCollapsed">
-                Select SQL query <span class="caret"></span></button>
-            <div uib-collapse="isQueriesCollapsed">
-                <hr/>
-                <div class="well clearfix"> List of queries...
-                    <button class="btn btn-danger pull-right">
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group" uib-dropdown>
+                    <button id="query-button" type="button" class="btn btn-primary btn-block" uib-dropdown-toggle>
+                        {{ selectedQueryName }} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="query-button">
+                        <li role="menuitem" ng-repeat="(key, data) in queryList" ng-click="setSelectedQuery(key, data)">
+                            <a href="#">{{ key }}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="btn-group" style="width: .10%">
+                    <button class="btn btn-success pull-right" ng-click="executeQuery()">
                         Execute <span class="glyphicon glyphicon-play"></span>
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -59,10 +68,19 @@
             </ul>
         </div>
         <div class="col-md-10 col-lg-10">
-            <div class="well well-lg">
-                <!--Query results...-->
-
-            </div>
+            <!--Query results...-->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th ng-repeat="(key, val) in currQueryResult[0]">{{ key }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="res in currQueryResult">
+                        <td ng-repeat="(key, val) in res">{{ val }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
