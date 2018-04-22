@@ -7,6 +7,9 @@ const options = {
 
 // connect to dbs
 const pgp = require('pg-promise')(options);
+const pgMonitor = require('pg-monitor');
+pgMonitor.attach(options, ['query', 'error']);
+
 const imdbConfiguration = {
     host: 'localhost',
     port: 5432,
@@ -258,6 +261,23 @@ function useIndex(index) {
     return udf;
 }
 
+function getCustomQuery(req, res, next) {
+    let customQuery = req.query.query;
+
+    imdb.any(customQuery)
+        .then(function (data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    data: data,
+                    message: 'Retrieved custom query result'
+                });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 module.exports = {
     getKeywordSimilarity: getKeywordSimilarity,
     getKnn: getKnn,
@@ -266,5 +286,6 @@ module.exports = {
     getAnalogy: getAnalogy,
     getAnalogyIn: getAnalogyIn,
     getGrouping: getGrouping,
-    getTables: getTables
+    getTables: getTables,
+    getCustomQuery: getCustomQuery
 };

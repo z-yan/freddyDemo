@@ -12,5 +12,6 @@ router.get('/api/analogy', db.getAnalogy);
 router.get('/api/analogy_in', db.getAnalogyIn);
 router.get('/api/grouping', db.getGrouping);
 router.get('/api/tables', db.getTables);
+router.get('/api/custom_query', db.getCustomQuery);
 
 module.exports = router;
