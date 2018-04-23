@@ -68,17 +68,10 @@
             </ul>
         </div>
         <div class="col-md-10 col-lg-10">
-            <table ng-table="resultsTable" class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th ng-repeat="(key, val) in $data[0]">{{ key }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="res in $data">
-                        <td ng-repeat="(key, val) in res">{{ val }}</td>
-                    </tr>
-                </tbody>
+            <table ng-table-dynamic="resultsTable with cols" class="table table-striped table-hover">
+                <tr ng-repeat="row in $data">
+                    <td ng-repeat="col in $columns">{{::row[col.field]}}</td>
+                </tr>
             </table>
         </div>
     </div>

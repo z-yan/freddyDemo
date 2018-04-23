@@ -40,12 +40,24 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                 console.log(response.data);
                 $scope.currQueryResult = response.data.data;
 
+                $scope.cols = [];
+
+                angular.forEach($scope.currQueryResult[0], function (value, key) {
+                    $scope.cols.push({
+                        title: key,
+                        field: key,
+                        sortable: key,
+                        show: true
+                    });
+                });
+
                 $scope.resultsTable = new NgTableParams({
                     page: 1,
                     count: 10,
                 }, {
                     dataset: $scope.currQueryResult
                 });
+
             }, function errorCallback(response) {
                 console.log("Unable to fetch query results.");
             });
