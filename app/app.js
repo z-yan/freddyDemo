@@ -1,10 +1,11 @@
 const freddyDemo = angular.module('freddyDemo', [
     'ngRoute',
     'ui.bootstrap',
-    'hljs'
+    'hljs',
+    'ngTable'
 ]);
 
-freddyDemo.controller('MainController', function ($scope, $http) {
+freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', function ($scope, $http, NgTableParams) {
     $scope.isSettingsCollapsed = true;
     $scope.isQueriesCollapsed = true;
 
@@ -38,6 +39,13 @@ freddyDemo.controller('MainController', function ($scope, $http) {
             .then(function successCallback(response) {
                 console.log(response.data);
                 $scope.currQueryResult = response.data.data;
+
+                $scope.resultsTable = new NgTableParams({
+                    page: 1,
+                    count: 10,
+                }, {
+                    dataset: $scope.currQueryResult
+                });
             }, function errorCallback(response) {
                 console.log("Unable to fetch query results.");
             });
@@ -50,4 +58,4 @@ freddyDemo.controller('MainController', function ($scope, $http) {
 
     $scope.getTableList($scope.selectedDb);
     $scope.getQueryList();
-});
+}]);

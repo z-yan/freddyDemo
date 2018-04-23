@@ -68,15 +68,14 @@
             </ul>
         </div>
         <div class="col-md-10 col-lg-10">
-            <!--Query results...-->
-            <table class="table">
+            <table ng-table="resultsTable" class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th ng-repeat="(key, val) in currQueryResult[0]">{{ key }}</th>
+                        <th ng-repeat="(key, val) in $data[0]">{{ key }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="res in currQueryResult">
+                    <tr ng-repeat="res in $data">
                         <td ng-repeat="(key, val) in res">{{ val }}</td>
                     </tr>
                 </tbody>
