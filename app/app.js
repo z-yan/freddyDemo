@@ -12,7 +12,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.dbOptions = ['IMDb', 'Discogs'];
 
     $scope.selectedDb = $scope.dbOptions[0];
-    $scope.selectedQueryName = 'Select query';
+    $scope.selectedQuery = 'Select query';
 
     $scope.getTableList = function (dbName) {
         $scope.selectedDb = dbName;
@@ -26,7 +26,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.getQueryList = function () {
-        $http.get('example_queries.json')
+        $http.get('/api/query_list')
             .then(function successCallback(response) {
                 $scope.queryList = response.data;
             }, function errorCallback() {
@@ -63,9 +63,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             });
     };
 
-    $scope.setSelectedQuery = function (queryName, query) {
+    $scope.setSelectedQuery = function (query) {
         $scope.selectedQuery = query;
-        $scope.selectedQueryName = queryName;
     };
 
     $scope.getTableList($scope.selectedDb);

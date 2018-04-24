@@ -28,6 +28,8 @@ const discogsConfiguration = {
 };
 const discogs = pgp(discogsConfiguration);
 
+const queries = require('./example_queries');
+
 /*
 FREDDY UDFs
 */
@@ -261,10 +263,15 @@ function useIndex(index) {
     return udf;
 }
 
+function getQueryList(req, res, next) {
+    res.status(200)
+        .json(Object.keys(queries));
+}
+
 function getCustomQuery(req, res, next) {
     let customQuery = req.query.query;
 
-    imdb.any(customQuery)
+    imdb.any(queries[customQuery])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -287,5 +294,6 @@ module.exports = {
     getAnalogyIn: getAnalogyIn,
     getGrouping: getGrouping,
     getTables: getTables,
+    getQueryList: getQueryList,
     getCustomQuery: getCustomQuery
 };

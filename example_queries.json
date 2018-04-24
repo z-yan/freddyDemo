@@ -1,6 +1,6 @@
 {
   "directors of movies": "SELECT title, analogy_3cosadd_ivfadc('Godfather', 'Francis_Ford_Coppola', title) AS director FROM title WHERE analogy_3cosadd_ivfadc('Godfather', 'Francis_Ford_Coppola', title) != '' LIMIT 100",
-  "movies by continents": "SELECT token, grouptoken FROM grouping_func(ARRAY(SELECT regexp_replace(title, ' ', '_', 'g') FROM title WHERE title NOT LIKE '%25''%25' LIMIT 1000), '{Europe,America}')",
+  "movies by continents": "SELECT token, grouptoken FROM grouping_func(ARRAY(SELECT regexp_replace(title, ' ', '_', 'g') FROM title WHERE title NOT LIKE '%''%' LIMIT 1000), '{Europe,America}')",
   "keywords similar to comedy": "SELECT keyword, cosine_similarity(keyword, 'comedy') FROM keyword AS k INNER JOIN google_vecs ON google_vecs.word = k.keyword ORDER BY cosine_similarity(keyword, 'comedy') DESC LIMIT 10",
   "Get tags for movies": "SELECT title, ANN.word FROM title, k_nearest_neighbour_ivfadc(title.title, 5) AS ANN LIMIT 100",
   "movies similar to \"Godfather\"": "SELECT ANN.word FROM knn_in('Godfather', 5, ARRAY(SELECT title::varchar(80) FROM title)) AS ANN"
