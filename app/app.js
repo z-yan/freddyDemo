@@ -9,15 +9,15 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.isSettingsCollapsed = true;
     $scope.isQueriesCollapsed = true;
 
-    $scope.dbOptions = ['IMDb', 'Discogs'];
+    $scope.schemaOptions = ['IMDb', 'Discogs'];
 
-    $scope.selectedDb = $scope.dbOptions[0];
+    $scope.selectedSchema = $scope.schemaOptions[0];
     $scope.selectedQuery = 'Select query';
 
-    $scope.getTableList = function (dbName) {
-        $scope.selectedDb = dbName;
+    $scope.getTableList = function (schemaName) {
+        $scope.selectedSchema = schemaName;
 
-        $http.get('/api/tables?db=' + dbName.toLowerCase())
+        $http.get('/api/tables?schema=' + schemaName.toLowerCase())
             .then(function successCallback(response) {
                 $scope.tables = response.data.data;
             }, function errorCallback(response) {
@@ -67,6 +67,6 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         $scope.selectedQuery = query;
     };
 
-    $scope.getTableList($scope.selectedDb);
+    $scope.getTableList($scope.selectedSchema);
     $scope.getQueryList();
 }]);

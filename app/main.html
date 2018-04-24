@@ -24,11 +24,11 @@
             <div class="btn-group btn-group-justified">
                 <div class="btn-group" uib-dropdown>
                     <button id="db-button" type="button" class="btn btn-primary btn-block" uib-dropdown-toggle>
-                        {{ selectedDb }} <span class="caret"></span>
+                        {{ selectedSchema }} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="db-button">
-                        <li role="menuitem" ng-repeat="db in dbOptions" ng-click="getTableList(db)">
-                            <a href="#">{{ db }}</a>
+                        <li role="menuitem" ng-repeat="schema in schemaOptions" ng-click="getTableList(schema)">
+                            <a href="#">{{ schema }}</a>
                         </li>
                     </ul>
                 </div>
@@ -63,7 +63,7 @@
             <h4>Tables in schema:</h4>
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="table in tables">
-                    {{ table.tablename }}
+                    {{ table.table_name }}
                 </li>
             </ul>
         </div>
