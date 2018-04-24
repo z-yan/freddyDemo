@@ -216,13 +216,31 @@ function getGrouping(req, res, next) {
 function getTables(req, res, next) {
     let schemaName = req.query.schema;
 
-    db.any('SELECT table_name FROM information_schema.tables WHERE table_schema = $1', schemaName)
+    db.task(function* (t) {
+        let tableNames = yield t.any('SELECT table_name FROM information_schema.tables WHERE table_schema = $1', schemaName).map(a => a.table_name);
+        let tables = [];
+
+        for (let i = 0, len = tableNames.length; i < len; i++) {
+            let currTableName = tableNames[i];
+            let columns = yield t.any('SELECT column_name FROM information_schema.columns WHERE table_schema = $1 AND table_name = $2', [schemaName, currTableName]).map(a => a.column_name);
+
+            tables.push({
+                table_name: currTableName,
+                columns: columns
+            });
+        }
+
+        // console.log('Table names: ' + tableNames);
+        // console.log('Table data: ' + tables);
+
+        return tables;
+    })
         .then(function (data) {
             res.status(200)
                 .json({
                     status: 'success',
                     data: data,
-                    message: 'Retrieved tables'
+                    message: 'Retrieved tables with columns.'
                 });
         })
         .catch(function (err) {

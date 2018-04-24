@@ -10,9 +10,11 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.isQueriesCollapsed = true;
 
     $scope.schemaOptions = ['IMDb', 'Discogs'];
-
     $scope.selectedSchema = $scope.schemaOptions[0];
+
     $scope.selectedQuery = 'Select query';
+
+    $scope.isAccordionHeaderOpen = false;
 
     $scope.getTableList = function (schemaName) {
         $scope.selectedSchema = schemaName;
