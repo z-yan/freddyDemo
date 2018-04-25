@@ -12,6 +12,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.schemaOptions = ['IMDb', 'Discogs'];
     $scope.selectedSchema = $scope.schemaOptions[0];
+    $scope.tables = {};
 
     $scope.selectedQuery = 'Select query';
 
@@ -20,12 +21,14 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.getTableList = function (schemaName) {
         $scope.selectedSchema = schemaName;
 
-        $http.get('/api/tables?schema=' + schemaName.toLowerCase())
-            .then(function successCallback(response) {
-                $scope.tables = response.data.data;
-            }, function errorCallback(response) {
-                console.log("Unable to fetch tables in schema.");
-            });
+        if (!$scope.tables[schemaName]) {
+            $http.get('/api/tables?schema=' + schemaName.toLowerCase())
+                .then(function successCallback(response) {
+                    $scope.tables[schemaName] = response.data.data;
+                }, function errorCallback(response) {
+                    console.log("Unable to fetch tables in schema.");
+                });
+        }
     };
 
     $scope.getQueryList = function () {
