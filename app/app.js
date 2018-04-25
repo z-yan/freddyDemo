@@ -1,5 +1,6 @@
 const freddyDemo = angular.module('freddyDemo', [
     'ngRoute',
+    'ngAnimate',
     'ui.bootstrap',
     'hljs',
     'ngTable'

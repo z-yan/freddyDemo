@@ -16,11 +16,12 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "^1.6.9",
-    "angular-resource": "^1.6.9",
-    "angular-route": "^1.6.9",
+    "angular": "^1.6.10",
+    "angular-resource": "^1.6.10",
+    "angular-route": "^1.6.10",
     "bootstrap": "3.3.7",
     "angular-bootstrap": "^2.5.0",
-    "angular-highlightjs": "^0.7.1"
+    "angular-highlightjs": "^0.7.1",
+    "angular-animate": "^1.6.10"
   }
 }
