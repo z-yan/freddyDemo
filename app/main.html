@@ -14,8 +14,34 @@
 </nav>
 
 <div class="container-fluid" uib-collapse="isSettingsCollapsed">
-    <!-- TODO -->
-    <div class="well well-lg">Settings go here: Indices, PV, Vectors...</div>
+    <div class="row well well-lg">
+        <div class="row">
+            <div class="col-lg-2">Select index:</div>
+            <div class="col-lg-2">Use post-verification:</div>
+        </div>
+
+        <div class="row" style="margin-top: 5px;">
+            <div class="col-lg-2">
+                <div class="btn-group">
+                    <label ng-repeat="option in indexOptions" class="btn btn-primary"
+                           ng-model="$parent.selectedIndex" uib-btn-radio="'{{ option }}'">
+                        {{ option }}
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="btn-group">
+                    <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ true }}">
+                        True
+                    </label>
+                    <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ false }}">
+                        False
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container-fluid">

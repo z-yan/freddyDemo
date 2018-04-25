@@ -14,6 +14,10 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.selectedSchema = $scope.schemaOptions[0];
     $scope.tables = {};
 
+    $scope.indexOptions = ['RAW', 'PQ', 'IVFADC'];
+    $scope.selectedIndex = $scope.indexOptions[0];
+    $scope.usePv = false;
+
     $scope.selectedQuery = 'Select query';
 
     $scope.isAccordionHeaderOpen = false;
@@ -71,6 +75,10 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.setSelectedQuery = function (query) {
         $scope.selectedQuery = query;
+    };
+
+    $scope.updateWe = function (we) {
+        $scope.selectedIndex = we;
     };
 
     $scope.getTableList($scope.selectedSchema);
