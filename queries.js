@@ -222,11 +222,11 @@ function getTables(req, res, next) {
 
         for (let i = 0, len = tableNames.length; i < len; i++) {
             let currTableName = tableNames[i];
-            let columns = yield t.any('SELECT column_name FROM information_schema.columns WHERE table_schema = $1 AND table_name = $2', [schemaName, currTableName]).map(a => a.column_name);
+            let columnInfo = yield t.any('SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = $1 AND table_name = $2', [schemaName, currTableName]);
 
             tables.push({
                 table_name: currTableName,
-                columns: columns
+                columns: columnInfo
             });
         }
 
