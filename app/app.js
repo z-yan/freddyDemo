@@ -48,8 +48,9 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.executeQuery = function () {
         $http.get('/api/custom_query?query=' + $scope.selectedQuery)
             .then(function successCallback(response) {
-                console.log(response.data);
+                // console.log(response.data);
                 $scope.currQueryResult = response.data.data;
+                $scope.currQueryDuration = response.data.duration;
 
                 $scope.cols = [];
 

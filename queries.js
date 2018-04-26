@@ -272,12 +272,13 @@ function getQueryList(req, res, next) {
 function getCustomQuery(req, res, next) {
     let customQuery = req.query.query;
 
-    db.any(queries[customQuery])
+    db.result(queries[customQuery])
         .then(function (data) {
             res.status(200)
                 .json({
                     status: 'success',
-                    data: data,
+                    data: data.rows,
+                    duration: data.duration,
                     message: 'Retrieved custom query result'
                 });
         })

@@ -109,6 +109,7 @@
                     <td ng-repeat="col in $columns">{{::row[col.field]}}</td>
                 </tr>
             </table>
+            <span ng-show="currQueryDuration != null">Execution time: {{ currQueryDuration / 1000}} s</span>
         </div>
     </div>
 </div>
