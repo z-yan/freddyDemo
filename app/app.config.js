@@ -1,6 +1,6 @@
 // Configure routes
 angular.module('freddyDemo')
-    .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+    .config(['$routeProvider', '$locationProvider', 'cfpLoadingBarProvider', function ($routeProvider, $locationProvider, cfpLoadingBarProvider) {
         $routeProvider
             .when("/", {
                 templateUrl: '/app/main.html',
@@ -9,4 +9,6 @@ angular.module('freddyDemo')
             .otherwise({redirectTo: '/'});
 
         $locationProvider.html5Mode(true);
+
+        cfpLoadingBarProvider.includeSpinner = false;
     }]);

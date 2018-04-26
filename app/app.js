@@ -3,7 +3,8 @@ const freddyDemo = angular.module('freddyDemo', [
     'ngAnimate',
     'ui.bootstrap',
     'hljs',
-    'ngTable'
+    'ngTable',
+    'angular-loading-bar'
 ]);
 
 freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', function ($scope, $http, NgTableParams) {
