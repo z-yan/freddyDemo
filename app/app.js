@@ -19,7 +19,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.selectedIndex = $scope.indexOptions[0];
     $scope.usePv = false;
 
-    $scope.selectedQuery = 'Select query';
+    $scope.selectedQueryName = 'Select query';
 
     $scope.isAccordionHeaderOpen = false;
 
@@ -37,7 +37,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.getQueryList = function () {
-        $http.get('/api/query_list')
+        $http.get('example_queries.json')
             .then(function successCallback(response) {
                 $scope.queryList = response.data;
             }, function errorCallback() {
@@ -75,8 +75,9 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             });
     };
 
-    $scope.setSelectedQuery = function (query) {
+    $scope.setSelectedQuery = function (queryName, query) {
         $scope.selectedQuery = query;
+        $scope.selectedQueryName = queryName;
     };
 
     $scope.updateWe = function (we) {

@@ -19,8 +19,6 @@ const dbConfiguration = {
 };
 const db = pgp(dbConfiguration);
 
-const queries = require('./example_queries');
-
 /*
 FREDDY UDFs
 */
@@ -264,15 +262,10 @@ function useIndex(index) {
     return udf;
 }
 
-function getQueryList(req, res, next) {
-    res.status(200)
-        .json(Object.keys(queries));
-}
-
 function getCustomQuery(req, res, next) {
     let customQuery = req.query.query;
 
-    db.result(queries[customQuery])
+    db.result(customQuery)
         .then(function (data) {
             res.status(200)
                 .json({
@@ -296,6 +289,5 @@ module.exports = {
     getAnalogyIn: getAnalogyIn,
     getGrouping: getGrouping,
     getTables: getTables,
-    getQueryList: getQueryList,
     getCustomQuery: getCustomQuery
 };

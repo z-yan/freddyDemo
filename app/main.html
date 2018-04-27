@@ -65,11 +65,11 @@
             <div class="btn-group btn-group-justified">
                 <div class="btn-group" uib-dropdown>
                     <button id="query-button" type="button" class="btn btn-primary btn-block" uib-dropdown-toggle>
-                        {{ selectedQuery }} <span class="caret"></span>
+                        {{ selectedQueryName }} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="query-button">
-                        <li role="menuitem" ng-repeat="query in queryList" ng-click="setSelectedQuery(query)">
-                            <a href="#">{{ query }}</a>
+                        <li role="menuitem" ng-repeat="(key, data) in queryList" ng-click="setSelectedQuery(key, data)">
+                            <a href="#">{{ key }}</a>
                         </li>
                     </ul>
                 </div>
