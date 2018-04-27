@@ -45,6 +45,13 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $(".CodeMirror-scroll").css('overflow', 'hidden');
 
+    function updateEditor(newValue) {
+        queryEditor.setValue(newValue);
+        setTimeout(function () {
+            queryEditor.refresh();
+        }, 1);
+    }
+
     $scope.getTableList = function (schemaName) {
         $scope.selectedSchema = schemaName;
 
@@ -68,7 +75,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.executeQuery = function () {
-        $http.get('/api/custom_query?query=' + $scope.selectedQuery)
+        $http.get('/api/custom_query?query=' + queryEditor.getValue())
             .then(function successCallback(response) {
                 // console.log(response.data);
                 $scope.currQueryResult = response.data.data;
@@ -100,13 +107,18 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.setSelectedQuery = function (queryName, query) {
         $scope.isQueryEditorCollapsed = false;
 
-        queryEditor.setValue(query);
-        setTimeout(function () {
-            queryEditor.refresh();
-        }, 1);
+        updateEditor(query);
 
         $scope.selectedQuery = query;
         $scope.selectedQueryName = queryName;
+    };
+
+    $scope.setAttributeQuery = function (table, attr) {
+        $scope.isQueryEditorCollapsed = false;
+
+        $scope.selectedQueryName = 'Custom attribute query';
+
+        updateEditor('SELECT ' + attr + ' FROM ' + $scope.selectedSchema.toLowerCase() + '.' + table + ' LIMIT 1000');
     };
 
     $scope.updateWe = function (we) {

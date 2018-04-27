@@ -70,8 +70,11 @@
                     </uib-accordion-heading>
 
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="column in table.columns">{{ column.column_name }}: <i>{{
-                            column.data_type }}</i></li>
+                        <li class="list-group-item" ng-repeat="column in table.columns">
+                            <a ng-click="setAttributeQuery(table.table_name, column.column_name)">
+                                {{ column.column_name }}: <i>{{ column.data_type }}</i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </uib-accordion>
