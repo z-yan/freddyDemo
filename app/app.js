@@ -2,7 +2,6 @@ const freddyDemo = angular.module('freddyDemo', [
     'ngRoute',
     'ngAnimate',
     'ui.bootstrap',
-    'hljs',
     'ngTable',
     'angular-loading-bar'
 ]);
@@ -24,6 +23,27 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.isAccordionHeaderOpen = false;
 
     $scope.isQueryEditorCollapsed = true;
+
+    // query editor
+    let editorTextArea = document.getElementById('queryTextArea');
+    let queryEditor = CodeMirror.fromTextArea(editorTextArea, {
+        value: '',
+        mode: 'text/x-pgsql',
+        //theme: 'github',
+        lineWrapping: true
+    });
+
+    queryEditor.on("beforeChange", function (instance, change) {
+        let newtext = change.text.join("").replace(/\n/g, "");
+        change.update(change.from, change.to, [newtext]);
+        return true;
+    });
+
+    queryEditor.on("change", function (instance, change) {
+        $(".CodeMirror-hscrollbar").css('display', 'none');
+    });
+
+    $(".CodeMirror-scroll").css('overflow', 'hidden');
 
     $scope.getTableList = function (schemaName) {
         $scope.selectedSchema = schemaName;
@@ -79,6 +99,11 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.setSelectedQuery = function (queryName, query) {
         $scope.isQueryEditorCollapsed = false;
+
+        queryEditor.setValue(query);
+        setTimeout(function () {
+            queryEditor.refresh();
+        }, 1);
 
         $scope.selectedQuery = query;
         $scope.selectedQueryName = queryName;
