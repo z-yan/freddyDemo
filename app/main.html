@@ -16,12 +16,12 @@
 <div class="container-fluid" uib-collapse="isSettingsCollapsed">
     <div class="row well well-lg">
         <div class="row">
-            <div class="col-lg-2">Select index:</div>
-            <div class="col-lg-2">Use post-verification:</div>
+            <div class="col-md-2 col-lg-2">Select index:</div>
+            <div class="col-md-2 col-lg-2">Use post-verification:</div>
         </div>
 
         <div class="row" style="margin-top: 5px;">
-            <div class="col-lg-2">
+            <div class="col-md-2 col-lg-2">
                 <div class="btn-group">
                     <label ng-repeat="option in indexOptions" class="btn btn-primary"
                            ng-model="$parent.selectedIndex" uib-btn-radio="'{{ option }}'">
@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-2">
+            <div class="col-md-2 col-lg-2">
                 <div class="btn-group">
                     <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ true }}">
                         True
@@ -110,7 +110,6 @@
                 </tr>
             </table>
             <span ng-show="currQueryDuration != null">Execution time: {{ currQueryDuration / 1000}} s</span>
-
         </div>
     </div>
 </div>
