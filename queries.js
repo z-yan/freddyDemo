@@ -15,7 +15,7 @@ const dbConfiguration = {
     port: 5432,
     database: 'demo_database',
     user: 'demo_user',
-    password: '2\\a{KWvix_<M9%63',
+    password: 'demo_password'
 };
 const db = pgp(dbConfiguration);
 
