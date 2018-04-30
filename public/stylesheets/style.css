@@ -52,3 +52,11 @@ body {
 a[ng-click]{
     cursor: pointer;
 }
+
+.btn-toolbar.btn-flex {
+    display: flex;
+}
+
+.btn-flex .btn-group {
+    flex: 1;
+}

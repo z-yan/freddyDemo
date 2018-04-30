@@ -14,6 +14,9 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.selectedSchema = $scope.schemaOptions[0];
     $scope.tables = {};
 
+    $scope.vecsOptions = ['Google News'];
+    $scope.selectedVecs = $scope.vecsOptions[0];
+
     $scope.indexOptions = ['RAW', 'PQ', 'IVFADC'];
     $scope.selectedIndex = $scope.indexOptions[0];
     $scope.usePv = false;
@@ -127,8 +130,9 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         updateEditor('SELECT ' + attr + ' FROM ' + $scope.selectedSchema.toLowerCase() + '.' + table + ' LIMIT 1000');
     };
 
-    $scope.updateWe = function (we) {
-        $scope.selectedIndex = we;
+    $scope.setVecs = function (vecs) {
+        // TODO: apply setting to FREDDY
+        $scope.selectedVecs = vecs;
     };
 
     $scope.getTableList($scope.selectedSchema);

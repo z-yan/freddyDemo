@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse" role="navigation">
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">FREDDY Demo App</a>
@@ -14,6 +14,7 @@
 </nav>
 
 <div class="container-fluid" uib-collapse="isSettingsCollapsed">
+    <!-- TODO: apply settings to FREDDY -->
     <div class="row well well-lg">
         <div class="row">
             <div class="col-md-2 col-lg-2">Select index:</div>
@@ -47,14 +48,25 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 col-lg-2">
-            <div class="btn-group btn-group-justified">
-                <div class="btn-group" uib-dropdown>
-                    <button id="db-button" type="button" class="btn btn-primary btn-block" uib-dropdown-toggle>
+            <div class="btn-toolbar btn-flex">
+                <div class="btn-group" uib-dropdown uib-tooltip="Select schema">
+                    <button id="db-button" type="button" class="btn btn-danger btn-block" uib-dropdown-toggle>
                         {{ selectedSchema }} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="db-button">
                         <li role="menuitem" ng-repeat="schema in schemaOptions" ng-click="getTableList(schema)">
                             <a href="#">{{ schema }}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="btn-group" uib-dropdown uib-tooltip="Select word embeddings">
+                    <button id="vecs-button" type="button" class="btn btn-warning btn-block" uib-dropdown-toggle>
+                        {{ selectedVecs }} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="vecs-button">
+                        <li role="menuitem" ng-repeat="vecs in vecsOptions" ng-click="setVecs(vecs)">
+                            <a href="#">{{ vecs }}</a>
                         </li>
                     </ul>
                 </div>
