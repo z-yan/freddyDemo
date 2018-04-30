@@ -77,14 +77,20 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.executeQuery = function () {
         $http.get('/api/custom_query?query=' + queryEditor.getValue())
             .then(function successCallback(response) {
-                // console.log(response.data);
-                $scope.currQueryResult = response.data.data;
-                $scope.currQueryDuration = response.data.duration;
+                if ($scope.currResultsTable != null) {
+                    $scope.prevQueryResult = $scope.currQueryResult;
+                    $scope.prevQueryExecTime = $scope.currQueryExecTime;
+                    $scope.prevResultsTable = $scope.currResultsTable;
+                    $scope.prevCols = $scope.currCols;
+                }
 
-                $scope.cols = [];
+                $scope.currQueryResult = response.data.data;
+                $scope.currQueryExecTime = response.data.duration;
+
+                $scope.currCols = [];
 
                 angular.forEach($scope.currQueryResult[0], function (value, key) {
-                    $scope.cols.push({
+                    $scope.currCols.push({
                         title: key,
                         field: key,
                         sortable: key,
@@ -92,7 +98,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                     });
                 });
 
-                $scope.resultsTable = new NgTableParams({
+                $scope.currResultsTable = new NgTableParams({
                     page: 1,
                     count: 10,
                 }, {
