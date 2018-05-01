@@ -7,6 +7,8 @@ const freddyDemo = angular.module('freddyDemo', [
 ]);
 
 freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', function ($scope, $http, NgTableParams) {
+    $scope.resultsSize = 'col-md-10 col-lg-10';
+
     $scope.isSettingsCollapsed = true;
     $scope.isQueriesCollapsed = true;
 
@@ -133,6 +135,15 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.setVecs = function (vecs) {
         // TODO: apply setting to FREDDY
         $scope.selectedVecs = vecs;
+    };
+
+    $scope.changeResultsClass = function (collapsed) {
+        if (collapsed) {
+            $scope.resultsSize = 'col-md-10 col-lg-10';
+        }
+        else {
+            $scope.resultsSize = 'col-md-8 col-lg-8';
+        }
     };
 
     $scope.getTableList($scope.selectedSchema);

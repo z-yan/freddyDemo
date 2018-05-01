@@ -13,38 +13,6 @@
     </div>
 </nav>
 
-<div class="container-fluid" uib-collapse="isSettingsCollapsed">
-    <!-- TODO: apply settings to FREDDY -->
-    <div class="row well well-lg">
-        <div class="row">
-            <div class="col-md-2 col-lg-2">Select index:</div>
-            <div class="col-md-2 col-lg-2">Use post-verification:</div>
-        </div>
-
-        <div class="row" style="margin-top: 5px;">
-            <div class="col-md-2 col-lg-2">
-                <div class="btn-group">
-                    <label ng-repeat="option in indexOptions" class="btn btn-primary"
-                           ng-model="$parent.selectedIndex" uib-btn-radio="'{{ option }}'">
-                        {{ option }}
-                    </label>
-                </div>
-            </div>
-
-            <div class="col-md-2 col-lg-2">
-                <div class="btn-group">
-                    <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ true }}">
-                        True
-                    </label>
-                    <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ false }}">
-                        False
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 col-lg-2">
@@ -92,7 +60,7 @@
             </uib-accordion>
         </div>
 
-        <div class="col-md-10 col-lg-10">
+        <div ng-class="resultsSize">
             <div class="btn-group btn-group-justified">
                 <div class="btn-group" uib-dropdown>
                     <button id="query-button" type="button" class="btn btn-primary btn-block" uib-dropdown-toggle>
@@ -136,6 +104,33 @@
                     <span ng-show="prevQueryExecTime != null">Execution time: {{ prevQueryExecTime / 1000}} s</span>
                 </uib-tab>
             </uib-tabset>
+        </div>
+
+        <div class="col-md-2 col-lg-2 well" uib-collapse="isSettingsCollapsed" collapsed="changeResultsClass(true)"
+             expanding="changeResultsClass(false)">
+            <!-- TODO: apply settings to FREDDY -->
+            <div class="row">
+                <h3 style="margin-top: 0;">Advanced settings</h3>
+            </div>
+            <div class="row"> Select index:
+                <div class="btn-group">
+                    <label ng-repeat="option in indexOptions" class="btn btn-primary"
+                           ng-model="$parent.selectedIndex" uib-btn-radio="'{{ option }}'">
+                        {{ option }}
+                    </label>
+                </div>
+            </div>
+
+            <div class="row"> Use post-verification:
+                <div class="btn-group">
+                    <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ true }}">
+                        True
+                    </label>
+                    <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ false }}">
+                        False
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </div>

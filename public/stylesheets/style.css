@@ -49,7 +49,7 @@ body {
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
-a[ng-click]{
+a[ng-click] {
     cursor: pointer;
 }
 
