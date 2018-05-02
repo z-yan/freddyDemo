@@ -26,6 +26,7 @@
     "angular-loading-bar": "^0.9.0",
     "codemirror": "^5.37.0",
     "code-mirror-themes": "^0.0.3",
-    "angularjs-slider": "^6.5.1"
+    "angularjs-slider": "^6.5.1",
+    "plotly.js": "^1.37.0"
   }
 }

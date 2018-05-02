@@ -63,7 +63,7 @@
         <div ng-class="resultsSize">
             <uib-tabset>
                 <uib-tab index="0" heading="Query">
-                    <div class="btn-group btn-group-justified">
+                    <div class="btn-group btn-group-justified" style="margin-top: 3px;">
                         <div class="btn-group" uib-dropdown>
                             <button id="query-button" type="button" class="btn btn-primary btn-block"
                                     uib-dropdown-toggle>
@@ -88,7 +88,7 @@
                         <textarea id="queryTextArea"></textarea>
                     </div>
 
-                    <uib-tabset active="active" ng-show="currResultsTable != null">
+                    <uib-tabset ng-show="currResultsTable != null">
                         <uib-tab index="0" heading="Current results">
                             <table ng-table-dynamic="currResultsTable with currCols"
                                    class="table table-striped table-hover">
