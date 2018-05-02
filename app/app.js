@@ -8,6 +8,9 @@ const freddyDemo = angular.module('freddyDemo', [
 ]);
 
 freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', function ($scope, $http, NgTableParams) {
+    let editorTextArea;
+    let queryEditor;
+
     $scope.resultsSize = 'col-md-10 col-lg-10';
 
     $scope.isSettingsCollapsed = true;
@@ -43,27 +46,6 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             stepsArray: [0, 1, 2, 3, 4]
         }
     };
-
-    // query editor
-    let editorTextArea = document.getElementById('queryTextArea');
-    let queryEditor = CodeMirror.fromTextArea(editorTextArea, {
-        value: '',
-        mode: 'text/x-pgsql',
-        //theme: 'github',
-        lineWrapping: true
-    });
-
-    queryEditor.on("beforeChange", function (instance, change) {
-        let newtext = change.text.join("").replace(/\n/g, "");
-        change.update(change.from, change.to, [newtext]);
-        return true;
-    });
-
-    queryEditor.on("change", function (instance, change) {
-        $(".CodeMirror-hscrollbar").css('display', 'none');
-    });
-
-    $(".CodeMirror-scroll").css('overflow', 'hidden');
 
     function updateEditor(newValue) {
         queryEditor.setValue(newValue);
@@ -132,6 +114,28 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.setSelectedQuery = function (queryName, query) {
         $scope.isQueryEditorCollapsed = false;
+
+        if (queryEditor == null) {
+            editorTextArea = document.getElementById('queryTextArea');
+            queryEditor = CodeMirror.fromTextArea(editorTextArea, {
+                value: '',
+                mode: 'text/x-pgsql',
+                //theme: 'github',
+                lineWrapping: true
+            });
+
+            queryEditor.on("beforeChange", function (instance, change) {
+                let newtext = change.text.join("").replace(/\n/g, "");
+                change.update(change.from, change.to, [newtext]);
+                return true;
+            });
+
+            queryEditor.on("change", function (instance, change) {
+                $(".CodeMirror-hscrollbar").css('display', 'none');
+            });
+
+            $(".CodeMirror-scroll").css('overflow', 'hidden');
+        }
 
         updateEditor(query);
 
