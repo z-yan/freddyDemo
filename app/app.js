@@ -47,6 +47,28 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         }
     };
 
+    function createEditor() {
+        editorTextArea = document.getElementById('queryTextArea');
+        queryEditor = CodeMirror.fromTextArea(editorTextArea, {
+            value: '',
+            mode: 'text/x-pgsql',
+            //theme: 'github',
+            lineWrapping: true
+        });
+
+        queryEditor.on("beforeChange", function (instance, change) {
+            let newtext = change.text.join("").replace(/\n/g, "");
+            change.update(change.from, change.to, [newtext]);
+            return true;
+        });
+
+        queryEditor.on("change", function (instance, change) {
+            $(".CodeMirror-hscrollbar").css('display', 'none');
+        });
+
+        $(".CodeMirror-scroll").css('overflow', 'hidden');
+    }
+
     function updateEditor(newValue) {
         queryEditor.setValue(newValue);
         setTimeout(function () {
@@ -113,29 +135,11 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.setSelectedQuery = function (queryName, query) {
-        $scope.isQueryEditorCollapsed = false;
-
         if (queryEditor == null) {
-            editorTextArea = document.getElementById('queryTextArea');
-            queryEditor = CodeMirror.fromTextArea(editorTextArea, {
-                value: '',
-                mode: 'text/x-pgsql',
-                //theme: 'github',
-                lineWrapping: true
-            });
-
-            queryEditor.on("beforeChange", function (instance, change) {
-                let newtext = change.text.join("").replace(/\n/g, "");
-                change.update(change.from, change.to, [newtext]);
-                return true;
-            });
-
-            queryEditor.on("change", function (instance, change) {
-                $(".CodeMirror-hscrollbar").css('display', 'none');
-            });
-
-            $(".CodeMirror-scroll").css('overflow', 'hidden');
+            createEditor();
         }
+
+        $scope.isQueryEditorCollapsed = false;
 
         updateEditor(query);
 
@@ -144,6 +148,10 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.setAttributeQuery = function (table, attr) {
+        if (queryEditor == null) {
+            createEditor();
+        }
+
         $scope.isQueryEditorCollapsed = false;
 
         $scope.selectedQueryName = 'Custom attribute query';
