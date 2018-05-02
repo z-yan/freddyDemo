@@ -106,29 +106,47 @@
             </uib-tabset>
         </div>
 
-        <div class="col-md-2 col-lg-2 well" uib-collapse="isSettingsCollapsed" collapsed="changeResultsClass(true)"
+        <div class="col-md-2 col-lg-2" uib-collapse="isSettingsCollapsed"
+             collapsed="changeResultsClass(true)"
              expanding="changeResultsClass(false)">
             <!-- TODO: apply settings to FREDDY -->
-            <div class="row">
-                <h3 style="margin-top: 0;">Advanced settings</h3>
-            </div>
-            <div class="row"> Select index:
-                <div class="btn-group">
-                    <label ng-repeat="option in indexOptions" class="btn btn-primary"
-                           ng-model="$parent.selectedIndex" uib-btn-radio="'{{ option }}'">
-                        {{ option }}
-                    </label>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Advanced settings</h4>
                 </div>
-            </div>
 
-            <div class="row"> Use post-verification:
-                <div class="btn-group">
-                    <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ true }}">
-                        True
-                    </label>
-                    <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ false }}">
-                        False
-                    </label>
+                <div class="list-group">
+                    <div class="list-group-item"> Select index:
+                        <div class="btn-group">
+                            <label ng-repeat="option in indexOptions" class="btn btn-primary"
+                                   ng-model="$parent.selectedIndex" uib-btn-radio="'{{ option }}'">
+                                {{ option }}
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <div class="list-group-item" ng-show="selectedIndex === 'IVFADC'"> Set W Factor:
+                        <rzslider rz-slider-model="wFacSlider.value"
+                                  rz-slider-options="wFacSlider.options"></rzslider>
+                    </div>
+
+                    <div class="list-group-item"> Use post-verification:
+                        <div class="btn-group">
+                            <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ true }}">
+                                True
+                            </label>
+                            <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ false }}">
+                                False
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="list-group-item" ng-show="usePv">
+                        Set PV factor:
+                        <rzslider rz-slider-model="pvFacSlider.value"
+                                  rz-slider-options="pvFacSlider.options"></rzslider>
+                    </div>
                 </div>
             </div>
         </div>

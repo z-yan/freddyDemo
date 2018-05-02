@@ -3,7 +3,8 @@ const freddyDemo = angular.module('freddyDemo', [
     'ngAnimate',
     'ui.bootstrap',
     'ngTable',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'rzModule'
 ]);
 
 freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', function ($scope, $http, NgTableParams) {
@@ -28,6 +29,20 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.isAccordionHeaderOpen = false;
 
     $scope.isQueryEditorCollapsed = true;
+
+    // TODO use actual values
+    $scope.pvFacSlider = {
+        value: 0,
+        options: {
+            stepsArray: [0, 0.2, 0.4, 0.6, 0.8, 1]
+        }
+    };
+    $scope.wFacSlider = {
+        value: 0,
+        options: {
+            stepsArray: [0, 1, 2, 3, 4]
+        }
+    };
 
     // query editor
     let editorTextArea = document.getElementById('queryTextArea');
