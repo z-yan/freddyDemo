@@ -33,17 +33,21 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.isQueryEditorCollapsed = true;
 
-    // TODO use actual values
     $scope.pvFacSlider = {
-        value: 0,
+        value: 1,
         options: {
-            stepsArray: [0, 0.2, 0.4, 0.6, 0.8, 1]
+            floor: 1,
+            ceil: 1000,
+            step: 5
         }
     };
+
     $scope.wFacSlider = {
-        value: 0,
+        value: 1,
         options: {
-            stepsArray: [0, 1, 2, 3, 4]
+            floor: 1,
+            ceil: 100,
+            step: 1
         }
     };
 
