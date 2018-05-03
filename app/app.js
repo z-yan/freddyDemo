@@ -69,12 +69,14 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         $(".CodeMirror-scroll").css('overflow', 'hidden');
     }
 
-    function updateEditor(newValue) {
-        queryEditor.setValue(newValue);
-        setTimeout(function () {
-            queryEditor.refresh();
-        }, 1);
-    }
+    $scope.updateEditor = function (newValue) {
+        if (queryEditor != null) {
+            queryEditor.setValue(newValue);
+            setTimeout(function () {
+                queryEditor.refresh();
+            }, 1);
+        }
+    };
 
     $scope.getTableList = function (schemaName) {
         $scope.selectedSchema = schemaName;
@@ -98,8 +100,37 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             });
     };
 
+    $scope.setQueryFromList = function (queryName, query) {
+        if (queryEditor == null) {
+            createEditor();
+        }
+
+        $scope.isQueryEditorCollapsed = false;
+
+        $scope.updateEditor(query);
+
+        $scope.selectedQuery = query;
+        $scope.selectedQueryName = queryName;
+    };
+
+    $scope.setAttributeQuery = function (table, attr) {
+        if (queryEditor == null) {
+            createEditor();
+        }
+
+        $scope.isQueryEditorCollapsed = false;
+
+        $scope.selectedQuery = 'SELECT ' + attr + ' FROM ' + $scope.selectedSchema.toLowerCase() + '.' + table + ' LIMIT 1000';
+        $scope.selectedQueryName = 'Custom attribute query';
+
+        $scope.updateEditor($scope.selectedQuery);
+    };
+
     $scope.executeQuery = function () {
-        $http.get('/api/custom_query?query=' + queryEditor.getValue())
+        $scope.prevQuery = $scope.currQuery;
+        $scope.currQuery = queryEditor.getValue();
+
+        $http.get('/api/custom_query?query=' + $scope.currQuery)
             .then(function successCallback(response) {
                 if ($scope.currResultsTable != null) {
                     $scope.prevQueryResult = $scope.currQueryResult;
@@ -132,31 +163,6 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             }, function errorCallback(response) {
                 console.log("Unable to fetch query results.");
             });
-    };
-
-    $scope.setSelectedQuery = function (queryName, query) {
-        if (queryEditor == null) {
-            createEditor();
-        }
-
-        $scope.isQueryEditorCollapsed = false;
-
-        updateEditor(query);
-
-        $scope.selectedQuery = query;
-        $scope.selectedQueryName = queryName;
-    };
-
-    $scope.setAttributeQuery = function (table, attr) {
-        if (queryEditor == null) {
-            createEditor();
-        }
-
-        $scope.isQueryEditorCollapsed = false;
-
-        $scope.selectedQueryName = 'Custom attribute query';
-
-        updateEditor('SELECT ' + attr + ' FROM ' + $scope.selectedSchema.toLowerCase() + '.' + table + ' LIMIT 1000');
     };
 
     $scope.setVecs = function (vecs) {
