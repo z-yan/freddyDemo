@@ -7,13 +7,13 @@ uib-accordion > .panel-group > .panel > .panel-heading > .panel-title {
 }
 
 .column-list .list-group-item:first-child {
-    border-top-right-radius: 0px !important;
-    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
 }
 
 .column-list .list-group-item:last-child {
-    border-bottom-right-radius: 0px !important;
-    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 .panel-body {
