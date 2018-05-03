@@ -70,3 +70,22 @@ a[ng-click] {
 .btn-flex .btn-group {
     flex: 1;
 }
+
+#loading-bar {
+    pointer-events: all;
+    z-index: 99999;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    cursor: wait;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#loading-bar .bar {
+    height: 3px;
+}
