@@ -118,7 +118,6 @@
         <div class="col-md-2 col-lg-2" uib-collapse="isSettingsCollapsed"
              collapsed="changeResultsClass(true)"
              expanding="changeResultsClass(false)">
-            <!-- TODO: apply settings to FREDDY -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">Advanced settings</h4>
@@ -126,43 +125,65 @@
 
                 <form class="list-group">
                     <div class="list-group-item form-group">
-                        <label>Select index:</label>
+                        <label>Choose index:</label>
                         <div class="btn-group">
                             <label ng-repeat="option in indexOptions" class="btn btn-primary"
-                                   ng-model="$parent.selectedIndex" uib-btn-radio="'{{ option }}'">
+                                   ng-model="$parent.freddySettings.index" uib-btn-radio="'{{ option }}'">
                                 {{ option }}
                             </label>
                         </div>
                     </div>
 
 
-                    <div class="list-group-item form-group" ng-show="selectedIndex === 'IVFADC'">
-                        <label>Set W
-                            Factor:</label>
-                        <rzslider rz-slider-model="wFacSlider.value"
-                                  rz-slider-options="wFacSlider.options"></rzslider>
+                    <div class="list-group-item form-group" ng-show="freddySettings.index === 'IVFADC'">
+                        <label>Set W Factor:</label>
+                        <rzslider rz-slider-model="freddySettings.wFactor"
+                                  rz-slider-options="wFacSliderOptions"></rzslider>
+                    </div>
+
+                    <div class="list-group-item form-group">
+                        <label>Choose analogy function:</label>
+                        <div class="btn-group" uib-dropdown>
+                            <button id="analogy-button" type="button" class="btn btn-primary btn-block"
+                                    uib-dropdown-toggle>
+                                {{ selectedAnalogyName }} <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="analogy-button">
+                                <li role="menuitem" ng-repeat="analogyOption in analogyOptions"
+                                    ng-click="setAnalogy(analogyOption.value, analogyOption.name)">
+                                    <a href="#">{{ analogyOption.name }}</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="list-group-item form-group">
                         <label>Use post-verification:</label>
                         <div class="btn-group">
-                            <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ true }}">
-                                True
+                            <label class="btn btn-primary" ng-model="freddySettings.pv" uib-btn-radio="{{ true }}">
+                                Yes
                             </label>
-                            <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ false }}">
-                                False
+                            <label class="btn btn-primary" ng-model="freddySettings.pv" uib-btn-radio="{{ false }}">
+                                No
                             </label>
                         </div>
-
-                        <input type="button" class="btn btn-success pull-right" value="Apply"/>
                     </div>
 
-                    <div class="list-group-item form-group" ng-show="usePv">
+                    <div class="list-group-item form-group" ng-show="freddySettings.pv">
                         <label>Set PV factor:</label>
-                        <rzslider rz-slider-model="pvFacSlider.value"
-                                  rz-slider-options="pvFacSlider.options"></rzslider>
+                        <rzslider rz-slider-model="freddySettings.pvFactor"
+                                  rz-slider-options="pvFacSliderOptions"></rzslider>
                     </div>
 
+                    <div class="list-group-item">
+                        <button class="btn btn-success" ng-click="applySettings()">Apply <span
+                                class="glyphicon glyphicon-ok" style="vertical-align: middle;"></span>
+                        </button>
+
+                        <button class="btn btn-danger pull-right" ng-click="resetSettings()">Reset <span
+                                class="glyphicon glyphicon-remove"
+                                style="vertical-align: middle;"></span></button>
+                    </div>
                 </form>
             </div>
         </div>

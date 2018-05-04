@@ -20,38 +20,41 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.selectedSchema = $scope.schemaOptions[0];
     $scope.tables = {};
 
-    $scope.vecsOptions = ['Google News'];
-    $scope.selectedVecs = $scope.vecsOptions[0];
-
-    $scope.indexOptions = ['RAW', 'PQ', 'IVFADC'];
-    $scope.selectedIndex = $scope.indexOptions[0];
-    $scope.usePv = false;
-
     $scope.selectedQueryName = 'Select query';
 
     $scope.isAccordionHeaderOpen = false;
 
     $scope.isQueryEditorCollapsed = true;
 
-    $scope.pvFacSlider = {
-        value: 1,
-        options: {
-            floor: 1,
-            ceil: 1000,
-            step: 5
-        }
+    $scope.indexOptions = ['RAW', 'PQ', 'IVFADC'];
+
+    $scope.vecsOptions = ['Google News'];
+    $scope.selectedVecs = $scope.vecsOptions[0];
+
+    $scope.analogyOptions = [{
+        name: '3CosAdd',
+        value: 'analogy_3cosadd'
+    }, {
+        name: 'Pair Direction',
+        value: 'analogy_pair_direction'
+    }, {
+        name: '3CosMul',
+        value: 'analogy_3cosmul'
+    }];
+
+    $scope.pvFacSliderOptions = {
+        floor: 1,
+        ceil: 1000,
+        step: 5
     };
 
-    $scope.wFacSlider = {
-        value: 1,
-        options: {
-            floor: 1,
-            ceil: 100,
-            step: 1
-        }
+    $scope.wFacSliderOptions = {
+        floor: 1,
+        ceil: 100,
+        step: 1
     };
 
-    $scope.freddySettings = {
+    const defaultFreddySettings = {
         // default settings
         index: 'RAW',
         pv: false,
@@ -59,6 +62,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         wFactor: 1,
         analogyType: 'analogy_3cosadd'
     };
+
+    $scope.freddySettings = Object.assign({}, defaultFreddySettings);
 
     function createEditor() {
         editorTextArea = document.getElementById('queryTextArea');
@@ -178,11 +183,6 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             });
     };
 
-    $scope.setVecs = function (vecs) {
-        // TODO: apply setting to FREDDY
-        $scope.selectedVecs = vecs;
-    };
-
     $scope.changeResultsClass = function (collapsed) {
         if (collapsed) {
             $scope.resultsSize = 'col-md-10 col-lg-10';
@@ -190,6 +190,16 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         else {
             $scope.resultsSize = 'col-md-8 col-lg-8';
         }
+    };
+
+    $scope.setVecs = function (vecs) {
+        // TODO: apply setting to FREDDY
+        $scope.selectedVecs = vecs;
+    };
+
+    $scope.setAnalogy = function (analogy, analogyName) {
+        $scope.freddySettings.analogyType = analogy;
+        $scope.selectedAnalogyName = analogyName;
     };
 
     $scope.applySettings = function () {
@@ -202,14 +212,20 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             data: JSON.stringify($scope.freddySettings)
         })
             .then(function successCallback(response) {
-                console.log('Posted following settings successfully:\n' + $scope.freddySettings);
+                console.log('Posted following settings:\n' + JSON.stringify($scope.freddySettings));
             }, function errorCallback(response) {
                 console.log('Cannot apply settings.');
             });
     };
 
+    $scope.resetSettings = function () {
+        $scope.selectedAnalogyName = $scope.analogyOptions[0].name;
+
+        $scope.freddySettings = Object.assign({}, defaultFreddySettings);
+        $scope.applySettings();
+    };
+
     $scope.getTableList($scope.selectedSchema);
     $scope.getQueryList();
-
-    $scope.applySettings();
+    $scope.resetSettings();
 }]);
