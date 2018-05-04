@@ -53,7 +53,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.freddySettings = {
         // default settings
-        index: 'raw',
+        index: 'RAW',
         pv: false,
         pvFactor: 1,
         wFactor: 1,
@@ -193,7 +193,14 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.applySettings = function () {
-        $http.post('/api/settings', $scope.freddySettings)
+        $http({
+            method: 'POST',
+            url: '/api/settings',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify($scope.freddySettings)
+        })
             .then(function successCallback(response) {
                 console.log('Posted following settings successfully:\n' + $scope.freddySettings);
             }, function errorCallback(response) {
@@ -203,4 +210,6 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.getTableList($scope.selectedSchema);
     $scope.getQueryList();
+
+    $scope.applySettings();
 }]);
