@@ -45,7 +45,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.pvFacSliderOptions = {
         floor: 1,
         ceil: 1000,
-        step: 5
+        step: 1
     };
 
     $scope.wFacSliderOptions = {
@@ -58,8 +58,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         // default settings
         index: 'RAW',
         pv: false,
-        pvFactor: 1,
-        wFactor: 1,
+        pvFactor: 20,
+        wFactor: 3,
         analogyType: 'analogy_3cosadd'
     };
 
