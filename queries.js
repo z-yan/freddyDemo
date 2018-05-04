@@ -20,7 +20,7 @@ const dbConfiguration = {
 const db = pgp(dbConfiguration);
 
 /*
-FREDDY UDFs
+FREDDY UDFs: TODO adapt to newest FREDDY version
 */
 
 /**
@@ -280,6 +280,106 @@ function getCustomQuery(req, res, next) {
         });
 }
 
+function applySettings(req, res, next) {
+    console.log(`Applying settings:
+                 Index: ${req.body.index}
+                 PV: ${req.body.pv}
+                 PV Factor: ${req.body.pvFactor}
+                 W Factor: ${req.body.wFactor}
+                 Analogy function: ${req.body.analogyType}`);
+
+    const index = req.body.index;
+    const pv = req.body.pv;
+    const pvFactor = pv ? req.body.pvFactor : 1;
+    const wFactor = index === 'IVFADC' ? req.body.wFactor : 1;
+    const analogyType = req.body.analogyType;
+
+    let knnFunction;
+    // fall back to RAW
+    let knnInFunction = 'knn_in_exact';
+    // only IVFADC available for kNN batch
+    let knnBatchFunction = 'k_nearest_neighbour_ivfadc_batch';
+    let analogyFunction;
+    // fall back to RAW
+    let analogyInFunction = 'analogy_3cosadd_in';
+    // fall back to RAW
+    let groupsFunction = 'grouping_func';
+
+    switch (index) {
+        case 'RAW':
+            knnFunction = 'k_nearest_neighbour';
+            analogyFunction = analogyType;
+            break;
+        case 'PQ':
+            knnFunction = pv ? 'k_nearest_neighbour_pq_pv' : 'k_nearest_neighbour_pq';
+            knnInFunction = 'knn_in_pq';
+            // fall back to 3cosadd analogy
+            analogyFunction = 'analogy_3cosadd_pq';
+            analogyInFunction = 'analogy_3cosadd_in_pq';
+            groupsFunction = 'grouping_func_pq';
+            break;
+        case 'IVFADC':
+            knnFunction = pv ? 'k_nearest_neighbour_ivfadc_pv' : 'k_nearest_neighbour_ivfadc';
+            knnBatchFunction = 'k_nearest_neighbour_ivfadc_batch';
+            // fall back to 3cosadd analogy
+            analogyFunction = 'analogy_3cosadd_ivfadc';
+            break;
+    }
+
+    db.task(function* (t) {
+        // apply factor settings first
+        const q1 = t.any('SELECT set_pvf($1)', pvFactor);
+        const q2 = t.any('SELECT set_w($1)', wFactor);
+
+        // apply function settings
+        const q3 = t.any('SELECT set_knn_function($1)', knnFunction);
+        const q4 = t.any('SELECT set_knn_in_function($1)', knnInFunction);
+        const q5 = t.any('SELECT set_knn_batch_function($1)', knnBatchFunction);
+        const q6 = t.any('SELECT set_analogy_function($1)', analogyFunction);
+        const q7 = t.any('SELECT set_analogy_in_function($1)', analogyInFunction);
+        const q8 = t.any('SELECT set_groups_function($1)', groupsFunction);
+
+        return t.batch([q1, q2, q3, q4, q5, q6, q7, q8]);
+    })
+        .then(function (data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Applied settings successfully'
+                });
+
+            // debugging code
+            db.task(function* (t) {
+                let usedPvf = JSON.stringify(yield t.one('SELECT get_pvf()'));
+                let usedW = JSON.stringify(yield t.one('SELECT get_w()'));
+                let usedKnn = JSON.stringify(yield t.one('SELECT get_knn_function_name()'));
+                let usedKnnIn = JSON.stringify(yield t.one('SELECT get_knn_in_function_name()'));
+                let usedKnnBatch = JSON.stringify(yield t.one('SELECT get_knn_batch_function_name()'));
+                let usedAnalogy = JSON.stringify(yield t.one('SELECT get_analogy_function_name()'));
+                let usedAnalogyIn = JSON.stringify(yield t.one('SELECT get_analogy_in_function_name()'));
+                let usedGroups = JSON.stringify(yield t.one('SELECT get_groups_function_name()'));
+
+                console.log(`Current settings:
+                     PVF: ${usedPvf}
+                     W: ${usedW}
+                     kNN: ${usedKnn}
+                     kNN In: ${usedKnnIn}
+                     kNN Batch: ${usedKnnBatch}
+                     Analogy: ${usedAnalogy}
+                     Analogy In: ${usedAnalogyIn}
+                     Groups: ${usedGroups}`);
+            })
+                .then(function (data) {
+                })
+                .catch(function (err) {
+                    return next(err);
+                });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 module.exports = {
     getKeywordSimilarity: getKeywordSimilarity,
     getKnn: getKnn,
@@ -289,5 +389,6 @@ module.exports = {
     getAnalogyIn: getAnalogyIn,
     getGrouping: getGrouping,
     getTables: getTables,
-    getCustomQuery: getCustomQuery
+    getCustomQuery: getCustomQuery,
+    applySettings: applySettings
 };

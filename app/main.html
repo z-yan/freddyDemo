@@ -124,8 +124,9 @@
                     <h4 class="panel-title">Advanced settings</h4>
                 </div>
 
-                <div class="list-group">
-                    <div class="list-group-item"> Select index:
+                <form class="list-group">
+                    <div class="list-group-item form-group">
+                        <label>Select index:</label>
                         <div class="btn-group">
                             <label ng-repeat="option in indexOptions" class="btn btn-primary"
                                    ng-model="$parent.selectedIndex" uib-btn-radio="'{{ option }}'">
@@ -135,12 +136,15 @@
                     </div>
 
 
-                    <div class="list-group-item" ng-show="selectedIndex === 'IVFADC'"> Set W Factor:
+                    <div class="list-group-item form-group" ng-show="selectedIndex === 'IVFADC'">
+                        <label>Set W
+                            Factor:</label>
                         <rzslider rz-slider-model="wFacSlider.value"
                                   rz-slider-options="wFacSlider.options"></rzslider>
                     </div>
 
-                    <div class="list-group-item"> Use post-verification:
+                    <div class="list-group-item form-group">
+                        <label>Use post-verification:</label>
                         <div class="btn-group">
                             <label class="btn btn-primary" ng-model="usePv" uib-btn-radio="{{ true }}">
                                 True
@@ -149,14 +153,17 @@
                                 False
                             </label>
                         </div>
+
+                        <input type="button" class="btn btn-success pull-right" value="Apply"/>
                     </div>
 
-                    <div class="list-group-item" ng-show="usePv">
-                        Set PV factor:
+                    <div class="list-group-item form-group" ng-show="usePv">
+                        <label>Set PV factor:</label>
                         <rzslider rz-slider-model="pvFacSlider.value"
                                   rz-slider-options="pvFacSlider.options"></rzslider>
                     </div>
-                </div>
+
+                </form>
             </div>
         </div>
     </div>

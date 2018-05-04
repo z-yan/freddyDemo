@@ -51,6 +51,15 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         }
     };
 
+    $scope.freddySettings = {
+        // default settings
+        index: 'raw',
+        pv: false,
+        pvFactor: 1,
+        wFactor: 1,
+        analogyType: 'analogy_3cosadd'
+    };
+
     function createEditor() {
         editorTextArea = document.getElementById('queryTextArea');
         queryEditor = CodeMirror.fromTextArea(editorTextArea, {
@@ -181,6 +190,15 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         else {
             $scope.resultsSize = 'col-md-8 col-lg-8';
         }
+    };
+
+    $scope.applySettings = function () {
+        $http.post('/api/settings', $scope.freddySettings)
+            .then(function successCallback(response) {
+                console.log('Posted following settings successfully:\n' + $scope.freddySettings);
+            }, function errorCallback(response) {
+                console.log('Cannot apply settings.');
+            });
     };
 
     $scope.getTableList($scope.selectedSchema);
