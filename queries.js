@@ -228,22 +228,6 @@ function getTables(req, res, next) {
         });
 }
 
-function useIndex(index) {
-    let udf;
-
-    if (index === 'ivfadc') {
-        udf = '_ivfadc';
-    }
-    else if (index === 'pq') {
-        udf = '_pq';
-    }
-    else {
-        udf = '';
-    }
-
-    return udf;
-}
-
 function getCustomQuery(req, res, next) {
     let customQuery = req.query.query;
 
@@ -330,7 +314,7 @@ function applySettings(req, res, next) {
                     message: 'Applied settings successfully'
                 });
 
-            // debugging code
+            // TODO remove debugging code
             db.task(function* (t) {
                 let usedPvf = JSON.stringify(yield t.one('SELECT get_pvf()'));
                 let usedW = JSON.stringify(yield t.one('SELECT get_w()'));
