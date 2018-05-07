@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../queries');
+const db = require('../server/queries');
 
 // RESTful API routes
 router.get('/api/similarity', db.getKeywordSimilarity);
