@@ -20,7 +20,7 @@ const dbConfiguration = {
 const db = pgp(dbConfiguration);
 
 /*
-FREDDY UDFs: TODO adapt to newest FREDDY version
+FREDDY UDFs:
 */
 
 /**
@@ -49,27 +49,20 @@ function getKeywordSimilarity(req, res, next) {
 
 /**
  * kNN query.
- * @param {string} title - Title to find nearest neighbours for.
- * @param {string} index - Index to use.
- * @param {int} results - Number of results.
- * @param {string} usePv - Use post-verification or not.
+ * @param {string} query - Keyword to find nearest neighbours for.
+ * @param {int} k - Number of next neighbours.
  */
-// TODO rename title parameter?
 function getKnn(req, res, next) {
-    let title = req.query.title;
-    let index = req.query.index;
-    let results = parseInt(req.query.results);
-    let usePv = req.query.use_pv === 'true' ? '_pv' : '';
+    let query = req.query.query;
+    let k = parseInt(req.query.k);
 
-    let udf = useIndex(index);
-
-    db.any('SELECT t.word, t.squaredistance FROM ' + udf + usePv + '($1, $2) AS t ORDER BY t.squaredistance DESC', [title, results])
+    db.any('SELECT * FROM knn($1, $2)', [query, k])
         .then(function (data) {
             res.status(200)
                 .json({
                     status: 'success',
                     data: data,
-                    message: 'Retrieved kNNs using ' + index + ' index'
+                    message: 'Retrieved kNNs'
                 });
         })
         .catch(function (err) {
@@ -79,14 +72,14 @@ function getKnn(req, res, next) {
 
 /**
  * kNN batch query.
- * @param {string[]} array - Array of strings to find kNN for.
+ * @param {string[]} query_set - Array of strings to find kNN for.
  * @param {int} k - Number of neighbours.
  */
 function getKnnBatch(req, res, next) {
-    let array = JSON.parse(req.query.array);
+    let query_set = JSON.parse(req.query.query_set);
     let k = req.query.k;
 
-    db.any('SELECT * FROM k_nearest_neighbour_ivfadc_batch($1, $2)', [array, k])
+    db.any('SELECT * FROM knn_batch($1, $2)', [query_set, k])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -102,19 +95,16 @@ function getKnnBatch(req, res, next) {
 
 /**
  * kNN Query with specific output set.
- * @param {string} title - Title to find nearest neighbours for.
- * @param {int} results - Number of results.
- * @param {string[]} outputSet - Array of strings describing output set.
- * @param {string} usePq - Use PQ index or not.
+ * @param {string} query - Title to find nearest neighbours for.
+ * @param {int} k - Number of next neighbours.
+ * @param {string[]} input_set - Array of strings describing output set.
  */
-// TODO use other tables than movies?
 function getKnnIn(req, res, next) {
-    let title = req.query.title;
-    let results = parseInt(req.query.results);
-    let outputSet = JSON.parse(req.query.output_set);
-    let usePq = useIndex(req.query.use_pq);
+    let query = req.query.query;
+    let k = parseInt(req.query.k);
+    let input_set = JSON.parse(req.query.input_set);
 
-    db.any('SELECT * FROM knn_in' + usePq + '($1, $2, $3)', [title, results, outputSet])
+    db.any('SELECT * FROM knn_in($1, $2, $3)', [query, k, input_set])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -129,21 +119,17 @@ function getKnnIn(req, res, next) {
 }
 
 /**
- * Analogy query. Find token which is to arg3 as arg2 is to arg1.
- * @param {string} arg1 - First argument.
- * @param {string} arg2 - Second argument.
- * @param {string} arg3 - Third argument.
- * @param {string} index - Index to use.
+ * Analogy query. Find token which is to `a` as `b` is to `c`.
+ * @param {string} a - First argument.
+ * @param {string} b - Second argument.
+ * @param {string} c - Third argument.
  */
 function getAnalogy(req, res, next) {
-    let arg1 = req.query.arg1;
-    let arg2 = req.query.arg2;
-    let arg3 = req.query.arg3;
-    let index = req.query.index;
+    let a = req.query.a;
+    let b = req.query.b;
+    let c = req.query.c;
 
-    let udf = useIndex(index);
-
-    db.any('SELECT * FROM analogy_3cosadd' + udf + '($1, $2, $3)', [arg1, arg2, arg3])
+    db.any('SELECT * FROM analogy($1, $2, $3)', [a, b, c])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -159,20 +145,18 @@ function getAnalogy(req, res, next) {
 
 /**
  * Analogy query with specific output set.
- * @param {string} arg1 - First argument.
- * @param {string} arg2 - Second argument.
- * @param {string} arg3 - Third argument.
- * @param {string[]} outputSet - Array of strings describing output set.
- * @param {string} usePq - Use PQ index or not.
+ * @param {string} w1 - First argument.
+ * @param {string} w2 - Second argument.
+ * @param {string} w3 - Third argument.
+ * @param {string[]} input_set - Array of strings describing output set.
  */
 function getAnalogyIn(req, res, next) {
-    let arg1 = req.query.arg1;
-    let arg2 = req.query.arg2;
-    let arg3 = req.query.arg3;
-    let outputSet = JSON.parse(req.query.output_set);
-    let usePq = useIndex(req.query.use_pq);
+    let w1 = req.query.w1;
+    let w2 = req.query.w2;
+    let w3 = req.query.w3;
+    let input_set = JSON.parse(req.query.input_set);
 
-    db.any('SELECT result FROM analogy_3cosadd_in' + usePq + '($1, $2, $3, $4::varchar(100)[])', [arg1, arg2, arg3, outputSet])
+    db.any('SELECT * FROM analogy_in($1, $2, $3, $4::varchar(100)[])', [w1, w2, w3, input_set])
         .then(function (data) {
             res.status(200)
                 .json({
@@ -189,15 +173,13 @@ function getAnalogyIn(req, res, next) {
 /**
  * Grouping query.
  * @param {string[]} tokens - Array of input tokens.
- * @param {string[]} groupTokens - Array of grouping tokens.
- * @param {string} usePq - Use PQ index or not.
+ * @param {string[]} groups - Array of grouping tokens.
  */
 function getGrouping(req, res, next) {
     let tokens = JSON.parse(req.query.tokens);
-    let groupTokens = JSON.parse(req.query.group_tokens);
-    let usePq = useIndex(req.query.use_pq);
+    let groups = JSON.parse(req.query.groups);
 
-    db.any('SELECT token, grouptoken FROM grouping_func' + usePq + '($1, $2)', [tokens, groupTokens])
+    db.any('SELECT * FROM groups($1, $2)', [tokens, groups])
         .then(function (data) {
             res.status(200)
                 .json({
