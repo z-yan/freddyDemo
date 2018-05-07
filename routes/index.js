@@ -14,5 +14,6 @@ router.get('/api/grouping', db.getGrouping);
 router.get('/api/tables', db.getTables);
 router.get('/api/custom_query', db.getCustomQuery);
 router.post('/api/settings', db.applySettings);
+router.get('/api/test_knn', db.testKnn);
 
 module.exports = router;

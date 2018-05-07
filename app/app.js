@@ -212,7 +212,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             data: JSON.stringify($scope.freddySettings)
         })
             .then(function successCallback(response) {
-                console.log('Posted following settings:\n' + JSON.stringify($scope.freddySettings));
+                $scope.appliedSettings = Object.assign({}, $scope.freddySettings);
+                console.log('Applied following settings:\n' + JSON.stringify($scope.freddySettings));
             }, function errorCallback(response) {
                 console.log('Cannot apply settings.');
             });
@@ -223,6 +224,16 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
         $scope.freddySettings = Object.assign({}, defaultFreddySettings);
         $scope.applySettings();
+    };
+
+    $scope.newChart = function () {
+        // chart code
+        Plotly.plot('perfChart', [{}], {
+                margin: {t: 0}
+            },
+            {
+                displayModeBar: false
+            });
     };
 
     $scope.getTableList($scope.selectedSchema);

@@ -55,7 +55,7 @@
             </button>
 
             <uib-tabset>
-                <uib-tab index="0" heading="Query">
+                <uib-tab index="0" heading="Queries">
                     <!-- Query picker and editor -->
                     <div class="btn-group btn-group-justified" style="margin-top: 3px;">
                         <div class="btn-group" uib-dropdown>
@@ -106,7 +106,19 @@
                         </uib-tab>
                     </uib-tabset>
                 </uib-tab>
-                <uib-tab index="1" heading="Performance"></uib-tab>
+
+                <uib-tab index="1" heading="Performance">
+                    <form class="form-inline" style="margin-top: 3px;">
+                        <div class="form-group">
+                            <!-- TODO pick k parameter -->
+                            <label for="perfQueryNumber">No. of queries:</label>
+                            <input type="number" id="perfQueryNumber" min="1" max="100" ng-model="perfQueryNumber"/>
+                        </div>
+                        <button class="btn btn-primary" ng-click="newChart()">Test kNN</button>
+                    </form>
+
+                    <div id="perfChart"></div>
+                </uib-tab>
             </uib-tabset>
         </div>
 

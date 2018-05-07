@@ -19,6 +19,8 @@ const dbConfiguration = {
 };
 const db = pgp(dbConfiguration);
 
+const knnSamples = require('./knn_samples.json');
+
 /*
 FREDDY UDFs:
 */
@@ -292,7 +294,7 @@ function applySettings(req, res, next) {
             break;
     }
 
-    db.task(function* (t) {
+    db.tx(function* (t) {
         // apply factor settings first
         const q1 = t.any('SELECT set_pvf($1)', pvFactor);
         const q2 = t.any('SELECT set_w($1)', wFactor);
@@ -346,6 +348,61 @@ function applySettings(req, res, next) {
         });
 }
 
+// modified from https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
+function pickNRandomProperties(obj, n) {
+    let keys = Object.keys(obj);
+    let result = new Set();
+
+    while (result.size < n) {
+        result.add(keys[keys.length * Math.random() << 0]);
+    }
+
+    return result;
+}
+
+// kNN performance test function
+function testKnn(req, res, next) {
+    let queryNumber = req.query.query_number;
+    let k = parseInt(req.query.k);
+
+    // choose n random query terms
+    let samples = {};
+
+    pickNRandomProperties(knnSamples, queryNumber).forEach(function (value, value2, set) {
+        samples[value] = knnSamples[value];
+    });
+
+    // get query results for query terms with currently used settings
+    let queryResults = {};
+    let terms = Object.keys(samples);
+
+    db.task(function* (t) {
+        let queries = [];
+
+        terms.forEach(function (value) {
+            queries.push(t.any('SELECT word FROM knn($1, $2) ORDER BY similarity DESC', [value, k]));
+        });
+
+        return t.batch(queries);
+    })
+        .then(function (data) {
+            terms.forEach(function (value, index, array) {
+                let currResult = [];
+
+                data[index].forEach(function (value) {
+                    currResult.push(value[Object.keys(value)[0]]);
+                });
+
+                queryResults[terms[index]] = currResult;
+            });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+
+    // compare results to sample results
+}
+
 module.exports = {
     getKeywordSimilarity: getKeywordSimilarity,
     getKnn: getKnn,
@@ -356,5 +413,6 @@ module.exports = {
     getGrouping: getGrouping,
     getTables: getTables,
     getCustomQuery: getCustomQuery,
-    applySettings: applySettings
+    applySettings: applySettings,
+    testKnn: testKnn
 };
