@@ -360,6 +360,15 @@ function pickNRandomProperties(obj, n) {
     return result;
 }
 
+// calculate mathematical average of all numerical values in array
+function arrayAvg(array) {
+    let total = 0;
+    for (let i = 0; i < array.length; i++) {
+        total += array[i];
+    }
+    return total / array.length;
+}
+
 // kNN performance test function
 function testKnn(req, res, next) {
     let queryNumber = req.query.query_number;
@@ -380,7 +389,7 @@ function testKnn(req, res, next) {
         let queries = [];
 
         terms.forEach(function (value) {
-            queries.push(t.any('SELECT word FROM knn($1, $2) ORDER BY similarity DESC', [value, k]));
+            queries.push(t.result('SELECT word FROM knn($1, $2) ORDER BY similarity DESC', [value, k]));
         });
 
         return t.batch(queries);
@@ -389,18 +398,49 @@ function testKnn(req, res, next) {
             terms.forEach(function (value, index, array) {
                 let currResult = [];
 
-                data[index].forEach(function (value) {
+                data[index].rows.forEach(function (value) {
                     currResult.push(value[Object.keys(value)[0]]);
                 });
 
                 queryResults[terms[index]] = currResult;
             });
+
+            // compare results to sample results
+            let precisionValues = [];
+
+            Object.keys(queryResults).forEach(function (value) {
+                let currResults = queryResults[value];
+                let currSampleResults = knnSamples[value];
+                let currMatchCount = 0;
+
+                currResults.forEach(function (value, index, array) {
+                    if (value === currSampleResults[index]) {
+                        currMatchCount++;
+                    }
+                });
+
+                precisionValues.push(currMatchCount / k);
+            });
+
+            // calculate average precision
+            let avgPrecision = arrayAvg(precisionValues);
+
+            // calculate average duration
+            let durationValues = [];
+            data.forEach(function (value) {
+                durationValues.push(value.duration);
+            });
+            let avgDuration = arrayAvg(durationValues);
+
+            res.status(200).json({
+                    avgPrecision: avgPrecision,
+                    avgDuration: avgDuration
+                }
+            );
         })
         .catch(function (err) {
             return next(err);
         });
-
-    // compare results to sample results
 }
 
 module.exports = {
