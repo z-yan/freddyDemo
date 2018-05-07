@@ -1,21 +1,8 @@
-<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">FREDDY Demo App</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="#">Abstract</a></li>
-            <li><a href="#">Demo</a></li>
-        </ul>
-        <button class="btn btn-default navbar-btn pull-right" ng-click="isSettingsCollapsed = !isSettingsCollapsed">
-            <span class="glyphicon glyphicon-cog" style="vertical-align: middle;"></span> Settings
-        </button>
-    </div>
-</nav>
-
+<!-- Main content container -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 col-lg-2">
+            <!-- Schema and word embeddings pickers -->
             <div class="btn-toolbar btn-flex">
                 <div class="btn-group" uib-dropdown uib-tooltip="Select schema">
                     <button id="db-button" type="button" class="btn btn-danger btn-block" uib-dropdown-toggle>
@@ -40,6 +27,7 @@
                 </div>
             </div>
 
+            <!-- Table and attribute list -->
             <h4>Tables in schema:</h4>
             <uib-accordion close-others="true">
                 <div uib-accordion-group is-open="isAccordionHeaderOpen" class="panel panel-default panel-primary"
@@ -60,9 +48,15 @@
             </uib-accordion>
         </div>
 
+        <!-- Results and performance measurements views -->
         <div ng-class="resultsSize">
+            <button class="btn btn-default navbar-btn pull-right" ng-click="isSettingsCollapsed = !isSettingsCollapsed">
+                <span class="glyphicon glyphicon-cog" style="vertical-align: middle;"></span> Settings
+            </button>
+
             <uib-tabset>
                 <uib-tab index="0" heading="Query">
+                    <!-- Query picker and editor -->
                     <div class="btn-group btn-group-justified" style="margin-top: 3px;">
                         <div class="btn-group" uib-dropdown>
                             <button id="query-button" type="button" class="btn btn-primary btn-block"
@@ -88,6 +82,7 @@
                         <textarea id="queryTextArea"></textarea>
                     </div>
 
+                    <!-- Query results table -->
                     <uib-tabset ng-show="currResultsTable != null">
                         <uib-tab index="0" heading="Current results" select="updateEditor(currQuery)">
                             <table ng-table-dynamic="currResultsTable with currCols"
@@ -115,6 +110,7 @@
             </uib-tabset>
         </div>
 
+        <!-- Advanced settings menu -->
         <div class="col-md-2 col-lg-2" uib-collapse="isSettingsCollapsed"
              collapsed="changeResultsClass(true)"
              expanding="changeResultsClass(false)">
