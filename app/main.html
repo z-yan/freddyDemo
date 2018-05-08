@@ -111,11 +111,13 @@
                     <form class="form-inline" style="margin-top: 3px;">
                         <div class="form-group">
                             <label for="noOfPerfQueries">No. of queries:</label>
-                            <input type="number" id="noOfPerfQueries" min="1" max="100" ng-model="noOfPerfQueries"/>
+                            <input type="number" class="form-control" id="noOfPerfQueries" min="1" max="100"
+                                   ng-model="noOfPerfQueries"/>
                         </div>
                         <div class="form-group">
                             <label for="perfKParam">k Parameter:</label>
-                            <input type="number" id="perfKParam" min="1" max="1000" ng-model="perfKParam"/>
+                            <input type="number" class="form-control" id="perfKParam" min="1" max="1000"
+                                   ng-model="perfKParam"/>
                         </div>
                         <button class="btn btn-primary" ng-click="updateChart()">Test kNN</button>
                     </form>

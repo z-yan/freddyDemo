@@ -273,13 +273,17 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                     let layout = {
                         xaxis: {
                             title: 'Time (in s)',
-                            range: [1, 30],
-                            showline: true
+                            range: [0, 20],
+                            showline: true,
+                            dtick: 0.5,
+                            layer: 'below traces'
                         },
                         yaxis: {
                             title: 'Precision',
                             range: [0, 1],
-                            showline: true
+                            showline: true,
+                            dtick: 0.125,
+                            layer: 'below traces'
                         },
                         showlegend: true,
                         title: 'kNN Performance',
@@ -299,18 +303,16 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                 let traceIndex;
                 let infoText;
 
-                if ($scope.appliedSettings.pv && ['PQ', 'IVFADC'].includes($scope.appliedSettings.index)) {
-                    infoText = 'PV: ' + $scope.appliedSettings.pvFactor;
-                }
-
                 if ($scope.appliedSettings.index === 'RAW') {
                     traceIndex = 0;
                 }
                 else if ($scope.appliedSettings.index === 'PQ') {
                     traceIndex = 1;
+                    infoText = $scope.appliedSettings.pv ? 'PV = ' + $scope.appliedSettings.pvFactor : '';
                 }
                 else if ($scope.appliedSettings.index === 'IVFADC') {
                     traceIndex = 2;
+                    infoText = $scope.appliedSettings.pv ? 'PV = ' + $scope.appliedSettings.pvFactor + '; W = ' + $scope.appliedSettings.wFactor : 'W = ' + $scope.appliedSettings.wFactor;
                 }
 
                 // add new point to chart
@@ -320,11 +322,17 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                     text: [[infoText]]
                 }, [traceIndex]);
 
+                let lastIndex = graphDiv.data[traceIndex].x.length - 1;
                 if ($scope.appliedSettings.pv && ['PQ', 'IVFADC'].includes($scope.appliedSettings.index)) {
-                    let lastIndex = graphDiv.data[traceIndex].x.length - 1;
                     Plotly.restyle('perfChart', {
                         [`marker.line.color[${lastIndex}]`]: 'rgb(0, 0, 0)',
                         [`marker.line.width[${lastIndex}]`]: 2
+                    }, traceIndex);
+                }
+                else {
+                    Plotly.restyle('perfChart', {
+                        [`marker.line.color[${lastIndex}]`]: 'rgb(0, 0, 0)',
+                        [`marker.line.width[${lastIndex}]`]: 0
                     }, traceIndex);
                 }
             }, function errorCallback(response) {
