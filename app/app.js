@@ -226,6 +226,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         $scope.applySettings();
     };
 
+    // Chart generation
     let chartExists = false;
     $scope.noOfPerfQueries = 1;
     $scope.perfKParam = 1000;
@@ -235,12 +236,16 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             .then(function successCallback(response) {
                 // create chart if it doesn't exist yet
                 if (!chartExists) {
+                    /*
+                        dirty hack to show legend at all times:
+                        add one data point off the plot for each trace
+                     */
                     let rawTrace = {
                         name: 'RAW',
                         mode: 'markers',
                         type: 'scatter',
-                        x: [],
-                        y: [],
+                        x: [-5],
+                        y: [-5],
                         marker: {size: 12},
                         cliponaxis: false,
                         text: []
@@ -250,8 +255,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                         name: 'PQ',
                         mode: 'markers',
                         type: 'scatter',
-                        x: [],
-                        y: [],
+                        x: [-5],
+                        y: [-5],
                         marker: {size: 12},
                         cliponaxis: false,
                         text: []
@@ -261,8 +266,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                         name: 'IVFADC',
                         mode: 'markers',
                         type: 'scatter',
-                        x: [],
-                        y: [],
+                        x: [-5],
+                        y: [-5],
                         marker: {size: 12},
                         cliponaxis: false,
                         text: []
@@ -272,20 +277,26 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
                     let layout = {
                         xaxis: {
-                            title: 'Time (in s)',
+                            title: 'Execution time (in s)',
                             range: [0, 20],
                             showline: true,
                             dtick: 0.5,
-                            layer: 'below traces'
+                            layer: 'below traces',
+                            fixedrange: true
                         },
                         yaxis: {
                             title: 'Precision',
                             range: [0, 1],
                             showline: true,
                             dtick: 0.125,
-                            layer: 'below traces'
+                            layer: 'below traces',
+                            fixedrange: true
                         },
                         showlegend: true,
+                        legend: {
+                            x: 1,
+                            y: 1
+                        },
                         title: 'kNN Performance',
                     };
 
@@ -329,6 +340,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                         [`marker.line.width[${lastIndex}]`]: 2
                     }, traceIndex);
                 }
+                // again, dirty hack to fix appearance of new points...
                 else {
                     Plotly.restyle('perfChart', {
                         [`marker.line.color[${lastIndex}]`]: 'rgb(0, 0, 0)',
