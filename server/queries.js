@@ -371,7 +371,7 @@ function arrayAvg(array) {
 
 // kNN performance test function
 function testKnn(req, res, next) {
-    let queryNumber = req.query.query_number;
+    let queryNumber = parseInt(req.query.query_number);
     let k = parseInt(req.query.k);
 
     // choose n random query terms

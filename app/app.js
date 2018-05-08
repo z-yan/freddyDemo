@@ -226,13 +226,109 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         $scope.applySettings();
     };
 
-    $scope.newChart = function () {
-        // chart code
-        Plotly.plot('perfChart', [{}], {
-                margin: {t: 0}
-            },
-            {
-                displayModeBar: false
+    let chartExists = false;
+    $scope.noOfPerfQueries = 1;
+    $scope.perfKParam = 1000;
+
+    $scope.updateChart = function () {
+        $http.get('/api/test_knn?query_number=' + $scope.noOfPerfQueries + '&k=' + $scope.perfKParam)
+            .then(function successCallback(response) {
+                // create chart if it doesn't exist yet
+                if (!chartExists) {
+                    let rawTrace = {
+                        name: 'RAW',
+                        mode: 'markers',
+                        type: 'scatter',
+                        x: [],
+                        y: [],
+                        marker: {size: 12},
+                        cliponaxis: false,
+                        text: []
+                    };
+
+                    let pqTrace = {
+                        name: 'PQ',
+                        mode: 'markers',
+                        type: 'scatter',
+                        x: [],
+                        y: [],
+                        marker: {size: 12},
+                        cliponaxis: false,
+                        text: []
+                    };
+
+                    let ivfadcTrace = {
+                        name: 'IVFADC',
+                        mode: 'markers',
+                        type: 'scatter',
+                        x: [],
+                        y: [],
+                        marker: {size: 12},
+                        cliponaxis: false,
+                        text: []
+                    };
+
+                    let data = [rawTrace, pqTrace, ivfadcTrace];
+
+                    let layout = {
+                        xaxis: {
+                            title: 'Time (in s)',
+                            range: [1, 30],
+                            showline: true
+                        },
+                        yaxis: {
+                            title: 'Precision',
+                            range: [0, 1],
+                            showline: true
+                        },
+                        showlegend: true,
+                        title: 'kNN Performance',
+                    };
+
+                    let config = {
+                        displayModeBar: false
+                    };
+
+                    // chart code
+                    Plotly.plot('perfChart', data, layout, config);
+                    chartExists = true;
+                }
+
+                // update chart with new data
+                let graphDiv = document.getElementById('perfChart');
+                let traceIndex;
+                let infoText;
+
+                if ($scope.appliedSettings.pv && ['PQ', 'IVFADC'].includes($scope.appliedSettings.index)) {
+                    infoText = 'PV: ' + $scope.appliedSettings.pvFactor;
+                }
+
+                if ($scope.appliedSettings.index === 'RAW') {
+                    traceIndex = 0;
+                }
+                else if ($scope.appliedSettings.index === 'PQ') {
+                    traceIndex = 1;
+                }
+                else if ($scope.appliedSettings.index === 'IVFADC') {
+                    traceIndex = 2;
+                }
+
+                // add new point to chart
+                Plotly.extendTraces('perfChart', {
+                    x: [[response.data.avgDuration / 1000]],
+                    y: [[response.data.avgPrecision]],
+                    text: [[infoText]]
+                }, [traceIndex]);
+
+                if ($scope.appliedSettings.pv && ['PQ', 'IVFADC'].includes($scope.appliedSettings.index)) {
+                    let lastIndex = graphDiv.data[traceIndex].x.length - 1;
+                    Plotly.restyle('perfChart', {
+                        [`marker.line.color[${lastIndex}]`]: 'rgb(0, 0, 0)',
+                        [`marker.line.width[${lastIndex}]`]: 2
+                    }, traceIndex);
+                }
+            }, function errorCallback(response) {
+                console.log('Unable to update chart.');
             });
     };
 

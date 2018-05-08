@@ -110,14 +110,19 @@
                 <uib-tab index="1" heading="Performance">
                     <form class="form-inline" style="margin-top: 3px;">
                         <div class="form-group">
-                            <!-- TODO pick k parameter -->
-                            <label for="perfQueryNumber">No. of queries:</label>
-                            <input type="number" id="perfQueryNumber" min="1" max="100" ng-model="perfQueryNumber"/>
+                            <label for="noOfPerfQueries">No. of queries:</label>
+                            <input type="number" id="noOfPerfQueries" min="1" max="100" ng-model="noOfPerfQueries"/>
                         </div>
-                        <button class="btn btn-primary" ng-click="newChart()">Test kNN</button>
+                        <div class="form-group">
+                            <label for="perfKParam">k Parameter:</label>
+                            <input type="number" id="perfKParam" min="1" max="1000" ng-model="perfKParam"/>
+                        </div>
+                        <button class="btn btn-primary" ng-click="updateChart()">Test kNN</button>
                     </form>
-
-                    <div id="perfChart"></div>
+                    <hr/>
+                    <div class="col-md-8 col-lg-8">
+                        <div id="perfChart"></div>
+                    </div>
                 </uib-tab>
             </uib-tabset>
         </div>
