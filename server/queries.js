@@ -378,7 +378,8 @@ function testKnn(req, res, next) {
     let samples = {};
 
     pickNRandomProperties(knnSamples, queryNumber).forEach(function (value, value2, set) {
-        samples[value] = knnSamples[value];
+        // get first k sample results only
+        samples[value] = knnSamples[value].slice(0, k);
     });
 
     // get query results for query terms with currently used settings
@@ -395,6 +396,7 @@ function testKnn(req, res, next) {
         return t.batch(queries);
     })
         .then(function (data) {
+            // associate query result with term
             terms.forEach(function (value, index, array) {
                 let currResult = [];
 
@@ -402,24 +404,36 @@ function testKnn(req, res, next) {
                     currResult.push(value[Object.keys(value)[0]]);
                 });
 
-                queryResults[terms[index]] = currResult;
+                queryResults[value] = currResult;
             });
 
             // compare results to sample results
             let precisionValues = [];
 
             Object.keys(queryResults).forEach(function (value) {
-                let currResults = queryResults[value];
-                let currSampleResults = knnSamples[value];
+                // calculate precision ignoring results order
+                let currResults = new Set(queryResults[value]);
+                let currSampleResults = new Set(samples[value]);
+
+                let resultsIntersection = new Set([...currResults].filter(x => currSampleResults.has(x)));
+
+                let currPrecision = resultsIntersection.size / currSampleResults.size;
+
+                precisionValues.push(currPrecision);
+
+                /*
+
+                check order, too?
+
                 let currMatchCount = 0;
 
                 currResults.forEach(function (value, index, array) {
-                    if (value === currSampleResults[index]) {
-                        currMatchCount++;
-                    }
+                    currMatchCount += value === currSampleResults[index];
                 });
 
-                precisionValues.push(currMatchCount / k);
+                precisionValues.push(currMatchCount / currSampleResults.length);
+
+                */
             });
 
             // calculate average precision
