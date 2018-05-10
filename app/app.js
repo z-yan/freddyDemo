@@ -74,11 +74,11 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             lineWrapping: true
         });
 
-        queryEditor.on("beforeChange", function (instance, change) {
+/*        queryEditor.on("beforeChange", function (instance, change) {
             let newtext = change.text.join("").replace(/\n/g, "");
             change.update(change.from, change.to, [newtext]);
             return true;
-        });
+        });*/
 
         queryEditor.on("change", function (instance, change) {
             $(".CodeMirror-hscrollbar").css('display', 'none');
@@ -146,7 +146,10 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.executeQuery = function () {
         $scope.prevQuery = $scope.currQuery;
-        $scope.currQuery = queryEditor.getValue();
+        // replace line breaks with space
+        $scope.currQuery = queryEditor.getValue().replace(/\n/g, " ");
+        // replace % with %25 to avoid request parsing problems
+        $scope.currQuery = $scope.currQuery.replace(/%/g, "%25");
 
         $http.get('/api/custom_query?query=' + $scope.currQuery)
             .then(function successCallback(response) {
@@ -314,6 +317,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                 let traceIndex;
                 let infoText;
 
+                // TODO factors not being shown?
                 if ($scope.appliedSettings.index === 'RAW') {
                     traceIndex = 0;
                 }
