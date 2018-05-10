@@ -248,6 +248,7 @@ function getCustomQuery(req, res, next) {
         });
 }
 
+// TODO switch between different word embeddings
 function applySettings(req, res, next) {
     console.log(`Applying settings:
                  Index: ${req.body.index}
@@ -258,39 +259,36 @@ function applySettings(req, res, next) {
 
     const index = req.body.index;
     const pv = req.body.pv;
-    const pvFactor = pv ? req.body.pvFactor : 1;
-    const wFactor = index === 'IVFADC' ? req.body.wFactor : 1;
     const analogyType = req.body.analogyType;
 
-    let knnFunction;
-    // fall back to RAW
+    const pvFactor = pv ? req.body.pvFactor : 1;
+    const wFactor = index === 'IVFADC' ? req.body.wFactor : 1;
+
+    // Default RAW settings
+    let knnFunction = 'k_nearest_neighbour';
     let knnInFunction = 'knn_in_exact';
     // only IVFADC available for kNN batch
     let knnBatchFunction = 'k_nearest_neighbour_ivfadc_batch';
-    let analogyFunction;
-    // fall back to RAW
+    let analogyFunction = analogyType;
     let analogyInFunction = 'analogy_3cosadd_in';
-    // fall back to RAW
     let groupsFunction = 'grouping_func';
 
     switch (index) {
-        case 'RAW':
-            knnFunction = 'k_nearest_neighbour';
-            analogyFunction = analogyType;
-            break;
         case 'PQ':
             knnFunction = pv ? 'k_nearest_neighbour_pq_pv' : 'k_nearest_neighbour_pq';
             knnInFunction = 'knn_in_pq';
-            // fall back to 3cosadd analogy
-            analogyFunction = 'analogy_3cosadd_pq';
+            if (analogyFunction === 'analogy_3cosadd') {
+                analogyFunction = 'analogy_3cosadd_pq';
+            }
             analogyInFunction = 'analogy_3cosadd_in_pq';
             groupsFunction = 'grouping_func_pq';
             break;
         case 'IVFADC':
             knnFunction = pv ? 'k_nearest_neighbour_ivfadc_pv' : 'k_nearest_neighbour_ivfadc';
             knnBatchFunction = 'k_nearest_neighbour_ivfadc_batch';
-            // fall back to 3cosadd analogy
-            analogyFunction = 'analogy_3cosadd_ivfadc';
+            if (analogyFunction === 'analogy_3cosadd') {
+                analogyFunction = 'analogy_3cosadd_ivfadc';
+            }
             break;
     }
 
@@ -420,20 +418,6 @@ function testKnn(req, res, next) {
                 let currPrecision = resultsIntersection.size / currSampleResults.size;
 
                 precisionValues.push(currPrecision);
-
-                /*
-
-                check order, too?
-
-                let currMatchCount = 0;
-
-                currResults.forEach(function (value, index, array) {
-                    currMatchCount += value === currSampleResults[index];
-                });
-
-                precisionValues.push(currMatchCount / currSampleResults.length);
-
-                */
             });
 
             // calculate average precision
