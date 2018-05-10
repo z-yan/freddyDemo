@@ -9,7 +9,7 @@
                         {{ selectedSchema }} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="db-button">
-                        <li role="menuitem" ng-repeat="schema in schemaOptions" ng-click="getTableList(schema)">
+                        <li role="menuitem" ng-repeat="schema in schemaOptions" ng-click="selectSchema(schema)">
                             <a href="#">{{ schema }}</a>
                         </li>
                     </ul>
@@ -61,12 +61,13 @@
                         <div class="btn-group" uib-dropdown>
                             <button id="query-button" type="button" class="btn btn-primary btn-block"
                                     uib-dropdown-toggle>
-                                {{ selectedQueryDescr }} <span class="caret"></span>
+                                {{ selectedQuery.description }} <span
+                                    ng-show="selectedQuery == null">Choose query </span><span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="query-button">
                                 <li role="menuitem" ng-repeat="query in queryList[selectedSchema.toLowerCase()]"
-                                    ng-click="setQueryFromList(query.queryDescr, query.query)">
-                                    <a href="#">{{ query.queryDescr }}</a>
+                                    ng-click="setQueryFromList(query)">
+                                    <a href="#">{{ query.description }}</a>
                                 </li>
                             </ul>
                         </div>

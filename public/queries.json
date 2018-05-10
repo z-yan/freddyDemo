@@ -1,24 +1,29 @@
 {
   "imdb": [
     {
-      "queryDescr": "Directors of movies",
-      "query": "SELECT title, analogy_3cosadd_ivfadc('Godfather', 'Francis_Ford_Coppola', title) AS director FROM imdb.title\nWHERE analogy_3cosadd_ivfadc('Godfather', 'Francis_Ford_Coppola', title) != '' LIMIT 100"
+      "query": "SELECT title, analogy_3cosadd_ivfadc('Godfather', 'Francis_Ford_Coppola', title) AS director FROM imdb.title\nWHERE analogy_3cosadd_ivfadc('Godfather', 'Francis_Ford_Coppola', title) != '' LIMIT 100",
+      "description": "Directors of movies",
+      "type": "analogy"
     },
     {
-      "queryDescr": "Movies by continents",
-      "query": "SELECT token, grouptoken\nFROM grouping_func(ARRAY(SELECT regexp_replace(title, ' ', '_', 'g') FROM imdb.title\nWHERE title NOT LIKE '%''%' LIMIT 1000), '{Europe,America}')"
+      "query": "SELECT token, grouptoken\nFROM grouping_func(ARRAY(SELECT regexp_replace(title, ' ', '_', 'g') FROM imdb.title\nWHERE title NOT LIKE '%''%' LIMIT 1000), '{Europe,America}')",
+      "description": "Movies by continents",
+      "type": "grouping"
     },
     {
-      "queryDescr": "Keywords similar to comedy",
-      "query": "SELECT keyword, cosine_similarity(keyword, 'comedy') FROM imdb.keyword AS k\nINNER JOIN google_vecs ON google_vecs.word = k.keyword\nORDER BY cosine_similarity(keyword, 'comedy') DESC LIMIT 10"
+      "query": "SELECT keyword, cosine_similarity(keyword, 'comedy') FROM imdb.keyword AS k\nINNER JOIN google_vecs ON google_vecs.word = k.keyword\nORDER BY cosine_similarity(keyword, 'comedy') DESC LIMIT 10",
+      "description": "Keywords similar to comedy",
+      "type": "similarity"
     },
     {
-      "queryDescr": "Get tags for movies",
-      "query": "SELECT title, ANN.word FROM imdb.title, knn(title.title, 5) AS ANN LIMIT 100"
+      "query": "SELECT title, ANN.word FROM imdb.title, knn(title.title, 5) AS ANN LIMIT 100",
+      "description": "Get tags for movies",
+      "type": "knn"
     },
     {
-      "queryDescr": "Movies similar to \"Godfather\"",
-      "query": "SELECT ANN.word FROM knn_in('Godfather', 5, ARRAY(SELECT title::varchar(80) FROM imdb.title)) AS ANN"
+      "query": "SELECT ANN.word FROM knn_in('Godfather', 5, ARRAY(SELECT title::varchar(80) FROM imdb.title)) AS ANN",
+      "description": "Movies similar to \"Godfather\"",
+      "type": "knn_in"
     }
   ],
   "discogs": [

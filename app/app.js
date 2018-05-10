@@ -20,8 +20,6 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.selectedSchema = $scope.schemaOptions[0];
     $scope.tables = {};
 
-    $scope.selectedQueryDescr = 'Select query';
-
     $scope.isAccordionHeaderOpen = false;
 
     $scope.isQueryEditorCollapsed = true;
@@ -76,11 +74,11 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             lineWrapping: true
         });
 
-/*        queryEditor.on("beforeChange", function (instance, change) {
-            let newtext = change.text.join("").replace(/\n/g, "");
-            change.update(change.from, change.to, [newtext]);
-            return true;
-        });*/
+        /*        queryEditor.on("beforeChange", function (instance, change) {
+                    let newtext = change.text.join("").replace(/\n/g, "");
+                    change.update(change.from, change.to, [newtext]);
+                    return true;
+                });*/
 
         queryEditor.on("change", function (instance, change) {
             $(".CodeMirror-hscrollbar").css('display', 'none');
@@ -98,8 +96,10 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         }
     };
 
-    $scope.getTableList = function (schemaName) {
+    $scope.selectSchema = function (schemaName) {
         $scope.selectedSchema = schemaName;
+        $scope.selectedQuery = null;
+        $scope.isQueryEditorCollapsed = true;
 
         if (!$scope.tables[schemaName]) {
             $http.get('/api/tables?schema=' + schemaName.toLowerCase())
@@ -120,17 +120,16 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             });
     };
 
-    $scope.setQueryFromList = function (queryDescr, query) {
+    $scope.setQueryFromList = function (query) {
         if (queryEditor == null) {
             createEditor();
         }
 
         $scope.isQueryEditorCollapsed = false;
 
-        $scope.updateEditor(query);
+        $scope.updateEditor(query.query);
 
         $scope.selectedQuery = query;
-        $scope.selectedQueryDescr = queryDescr;
     };
 
     $scope.setAttributeQuery = function (table, attr) {
@@ -140,20 +139,24 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
         $scope.isQueryEditorCollapsed = false;
 
-        $scope.selectedQuery = 'SELECT ' + attr + ' FROM ' + $scope.selectedSchema.toLowerCase() + '.' + table + ' LIMIT 1000';
-        $scope.selectedQueryDescr = 'Custom attribute query';
+        $scope.selectedQuery = {};
+        $scope.selectedQuery.query = 'SELECT ' + attr + ' FROM ' + $scope.selectedSchema.toLowerCase() + '.' + table + ' LIMIT 1000';
+        $scope.selectedQuery.description = 'Custom attribute query';
+        $scope.selectedQuery.type = 'attr';
 
-        $scope.updateEditor($scope.selectedQuery);
+        $scope.updateEditor($scope.selectedQuery.query);
     };
 
     $scope.executeQuery = function () {
         $scope.prevQuery = $scope.currQuery;
-        // replace line breaks with space
-        $scope.currQuery = queryEditor.getValue().replace(/\n/g, " ");
-        // replace % with %25 to avoid request parsing problems
-        $scope.currQuery = $scope.currQuery.replace(/%/g, "%25");
+        $scope.currQuery = queryEditor.getValue();
 
-        $http.get('/api/custom_query?query=' + $scope.currQuery)
+        // replace line breaks with space
+        let queryParam = $scope.currQuery.replace(/\n/g, " ");
+        // replace % with %25 to avoid request parsing problems
+        queryParam = queryParam.replace(/%/g, "%25");
+
+        $http.get('/api/custom_query?query=' + queryParam)
             .then(function successCallback(response) {
                 if ($scope.currResultsTable != null) {
                     $scope.prevQueryResult = $scope.currQueryResult;
@@ -358,7 +361,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             });
     };
 
-    $scope.getTableList($scope.selectedSchema);
+    $scope.selectSchema($scope.selectedSchema);
     $scope.getQueryList();
     $scope.resetSettings();
 }]);
