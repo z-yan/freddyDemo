@@ -45,13 +45,15 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.pvFacSliderOptions = {
         floor: 1,
         ceil: 1000,
-        step: 1
+        step: 1,
+        logScale: true
     };
 
     $scope.wFacSliderOptions = {
         floor: 1,
         ceil: 100,
-        step: 1
+        step: 1,
+        logScale: true
     };
 
     const defaultFreddySettings = {
