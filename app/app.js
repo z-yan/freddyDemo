@@ -20,7 +20,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.selectedSchema = $scope.schemaOptions[0];
     $scope.tables = {};
 
-    $scope.selectedQueryName = 'Select query';
+    $scope.selectedQueryDescr = 'Select query';
 
     $scope.isAccordionHeaderOpen = false;
 
@@ -120,7 +120,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             });
     };
 
-    $scope.setQueryFromList = function (queryName, query) {
+    $scope.setQueryFromList = function (queryDescr, query) {
         if (queryEditor == null) {
             createEditor();
         }
@@ -130,7 +130,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         $scope.updateEditor(query);
 
         $scope.selectedQuery = query;
-        $scope.selectedQueryName = queryName;
+        $scope.selectedQueryDescr = queryDescr;
     };
 
     $scope.setAttributeQuery = function (table, attr) {
@@ -141,7 +141,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         $scope.isQueryEditorCollapsed = false;
 
         $scope.selectedQuery = 'SELECT ' + attr + ' FROM ' + $scope.selectedSchema.toLowerCase() + '.' + table + ' LIMIT 1000';
-        $scope.selectedQueryName = 'Custom attribute query';
+        $scope.selectedQueryDescr = 'Custom attribute query';
 
         $scope.updateEditor($scope.selectedQuery);
     };
