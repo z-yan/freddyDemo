@@ -143,9 +143,17 @@
                     <div class="list-group-item form-group">
                         <label>Choose index:</label>
                         <div class="btn-group">
-                            <label ng-repeat="option in indexOptions" class="btn btn-primary"
-                                   ng-model="$parent.freddySettings.index" uib-btn-radio="'{{ option }}'">
-                                {{ option }}
+                            <label class="btn btn-primary" ng-model="freddySettings.index" ng-disabled="disableRaw()"
+                                   uib-btn-radio="'RAW'">
+                                RAW
+                            </label>
+                            <label class="btn btn-primary" ng-model="freddySettings.index" ng-disabled="disablePq()"
+                                   uib-btn-radio="'PQ'">
+                                PQ
+                            </label>
+                            <label class="btn btn-primary" ng-model="freddySettings.index" ng-disabled="disableIvfadc()"
+                                   uib-btn-radio="'IVFADC'">
+                                IVFADC
                             </label>
                         </div>
                     </div>

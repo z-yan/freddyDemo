@@ -210,6 +210,22 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         $scope.selectedAnalogyName = analogyName;
     };
 
+    $scope.disableRaw = function () {
+        return false;
+    };
+
+    $scope.disablePq = function () {
+        return ($scope.selectedQuery.type === 'analogy'
+            && ($scope.freddySettings.analogyType === 'analogy_pair_direction'
+                || $scope.freddySettings.analogyType === 'analogy_3cosmul'));
+    };
+
+    $scope.disableIvfadc = function () {
+        return $scope.selectedQuery.type === 'analogy'
+            && ($scope.freddySettings.analogyType === 'analogy_pair_direction'
+                || $scope.freddySettings.analogyType === 'analogy_3cosmul');
+    };
+
     $scope.applySettings = function () {
         $http({
             method: 'POST',
