@@ -314,8 +314,7 @@ function applySettings(req, res, next) {
                     message: 'Applied settings successfully'
                 });
 
-            // TODO remove debugging code
-            db.task(function* (t) {
+/*            db.task(function* (t) {
                 let usedPvf = JSON.stringify(yield t.one('SELECT get_pvf()'));
                 let usedW = JSON.stringify(yield t.one('SELECT get_w()'));
                 let usedKnn = JSON.stringify(yield t.one('SELECT get_knn_function_name()'));
@@ -339,7 +338,7 @@ function applySettings(req, res, next) {
                 })
                 .catch(function (err) {
                     return next(err);
-                });
+                });*/
         })
         .catch(function (err) {
             return next(err);

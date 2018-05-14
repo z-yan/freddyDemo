@@ -8,7 +8,7 @@
     {
       "query": "SELECT token, grouptoken\nFROM groups(ARRAY(SELECT regexp_replace(title, ' ', '_', 'g') FROM imdb.title\nWHERE title NOT LIKE '%''%' LIMIT 1000), '{Europe,America}')",
       "description": "Movies by continents",
-      "type": "grouping"
+      "type": "groups"
     },
     {
       "query": "SELECT keyword, cosine_similarity(keyword, 'comedy') FROM imdb.keyword AS k\nINNER JOIN google_vecs ON google_vecs.word = k.keyword\nORDER BY cosine_similarity(keyword, 'comedy') DESC LIMIT 10",

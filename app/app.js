@@ -211,19 +211,45 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.disableRaw = function () {
+        let knnBatchDisable = $scope.selectedQuery.type === 'knn_batch';
+
+        if (knnBatchDisable) {
+            $scope.freddySettings.index = 'IVFADC';
+            return true;
+        }
+
         return false;
     };
 
     $scope.disablePq = function () {
-        return ($scope.selectedQuery.type === 'analogy'
+        let analogyDisable = $scope.selectedQuery.type === 'analogy'
             && ($scope.freddySettings.analogyType === 'analogy_pair_direction'
-                || $scope.freddySettings.analogyType === 'analogy_3cosmul'));
+                || $scope.freddySettings.analogyType === 'analogy_3cosmul');
+
+        let knnBatchDisable = $scope.selectedQuery.type === 'knn_batch';
+
+        if (analogyDisable || knnBatchDisable) {
+            $scope.freddySettings.index = 'RAW';
+            return true;
+        }
+
+        return false;
     };
 
     $scope.disableIvfadc = function () {
-        return $scope.selectedQuery.type === 'analogy'
+        let analogyDisable = $scope.selectedQuery.type === 'analogy'
             && ($scope.freddySettings.analogyType === 'analogy_pair_direction'
                 || $scope.freddySettings.analogyType === 'analogy_3cosmul');
+        let knnInDisable = $scope.selectedQuery.type === 'knn_in';
+        let analogyInDisable = $scope.selectedQuery.type === 'analogy_in';
+        let groupsDisable = $scope.selectedQuery.type === 'groups';
+
+        if (analogyDisable || knnInDisable || analogyInDisable || groupsDisable) {
+            $scope.freddySettings.index = 'RAW';
+            return true;
+        }
+
+        return false;
     };
 
     $scope.applySettings = function () {
