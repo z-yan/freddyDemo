@@ -302,9 +302,16 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                         type: 'scatter',
                         x: [-5],
                         y: [-5],
-                        marker: {size: 12},
+                        text: [''],
+                        marker: {
+                            size: 12,
+                            line: {
+                                color: ['rgb(0, 0, 0)'],
+                                width: [0],
+                                opacity: [1]
+                            }
+                        },
                         cliponaxis: false,
-                        text: []
                     };
 
                     let pqTrace = {
@@ -313,9 +320,16 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                         type: 'scatter',
                         x: [-5],
                         y: [-5],
-                        marker: {size: 12},
+                        text: [''],
+                        marker: {
+                            size: 12,
+                            line: {
+                                color: ['rgb(0, 0, 0)'],
+                                width: [0]
+                            },
+                            opacity: [1]
+                        },
                         cliponaxis: false,
-                        text: []
                     };
 
                     let ivfadcTrace = {
@@ -324,17 +338,24 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                         type: 'scatter',
                         x: [-5],
                         y: [-5],
-                        marker: {size: 12},
+                        text: [''],
+                        marker: {
+                            size: 12,
+                            line: {
+                                color: ['rgb(0, 0, 0)'],
+                                width: [0]
+                            },
+                            opacity: [1]
+                        },
                         cliponaxis: false,
-                        text: []
                     };
 
                     let data = [rawTrace, pqTrace, ivfadcTrace];
 
                     let layout = {
                         xaxis: {
-                            title: 'Execution time (in s)',
-                            range: [0, 20],
+                            title: 'Avg. execution time (in s)',
+                            range: [0, 30],
                             showline: true,
                             dtick: 0.5,
                             layer: 'below traces',
@@ -370,17 +391,24 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                 let traceIndex;
                 let infoText;
 
-                // TODO factors not being shown?
                 if ($scope.appliedSettings.index === 'RAW') {
                     traceIndex = 0;
+
+                    infoText = '';
                 }
                 else if ($scope.appliedSettings.index === 'PQ') {
                     traceIndex = 1;
+
                     infoText = $scope.appliedSettings.pv ? 'PV = ' + $scope.appliedSettings.pvFactor : '';
                 }
                 else if ($scope.appliedSettings.index === 'IVFADC') {
                     traceIndex = 2;
-                    infoText = $scope.appliedSettings.pv ? 'PV = ' + $scope.appliedSettings.pvFactor + '; W = ' + $scope.appliedSettings.wFactor : 'W = ' + $scope.appliedSettings.wFactor;
+
+                    infoText = 'W = ' + $scope.appliedSettings.wFactor;
+
+                    if ($scope.appliedSettings.pv) {
+                        infoText = infoText + '; PV = ' + $scope.appliedSettings.pvFactor;
+                    }
                 }
 
                 // add new point to chart
@@ -394,14 +422,16 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                 if ($scope.appliedSettings.pv && ['PQ', 'IVFADC'].includes($scope.appliedSettings.index)) {
                     Plotly.restyle('perfChart', {
                         [`marker.line.color[${lastIndex}]`]: 'rgb(0, 0, 0)',
-                        [`marker.line.width[${lastIndex}]`]: 2
+                        [`marker.line.width[${lastIndex}]`]: 2,
+                        [`marker.opacity[${lastIndex}]`]: 0.5
                     }, traceIndex);
                 }
                 // again, dirty hack to fix appearance of new points...
                 else {
                     Plotly.restyle('perfChart', {
                         [`marker.line.color[${lastIndex}]`]: 'rgb(0, 0, 0)',
-                        [`marker.line.width[${lastIndex}]`]: 0
+                        [`marker.line.width[${lastIndex}]`]: 0,
+                        [`marker.opacity[${lastIndex}`]: 1
                     }, traceIndex);
                 }
             }, function errorCallback(response) {

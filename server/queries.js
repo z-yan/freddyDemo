@@ -253,12 +253,14 @@ function getCustomQuery(req, res, next) {
 
 // TODO switch between different word embeddings
 function applySettings(req, res, next) {
+/*
     console.log(`Applying settings:
                  Index: ${req.body.index}
                  PV: ${req.body.pv}
                  PV Factor: ${req.body.pvFactor}
                  W Factor: ${req.body.wFactor}
                  Analogy function: ${req.body.analogyType}`);
+*/
 
     const index = req.body.index;
     const pv = req.body.pv;
