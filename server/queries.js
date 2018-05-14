@@ -243,8 +243,11 @@ function getCustomQuery(req, res, next) {
                     message: 'Retrieved custom query result'
                 });
         })
-        .catch(function (err) {
-            return next(err);
+        .catch(function (error) {
+            res.status(500)
+                .json({
+                    error: error
+                });
         });
 }
 
@@ -314,31 +317,31 @@ function applySettings(req, res, next) {
                     message: 'Applied settings successfully'
                 });
 
-/*            db.task(function* (t) {
-                let usedPvf = JSON.stringify(yield t.one('SELECT get_pvf()'));
-                let usedW = JSON.stringify(yield t.one('SELECT get_w()'));
-                let usedKnn = JSON.stringify(yield t.one('SELECT get_knn_function_name()'));
-                let usedKnnIn = JSON.stringify(yield t.one('SELECT get_knn_in_function_name()'));
-                let usedKnnBatch = JSON.stringify(yield t.one('SELECT get_knn_batch_function_name()'));
-                let usedAnalogy = JSON.stringify(yield t.one('SELECT get_analogy_function_name()'));
-                let usedAnalogyIn = JSON.stringify(yield t.one('SELECT get_analogy_in_function_name()'));
-                let usedGroups = JSON.stringify(yield t.one('SELECT get_groups_function_name()'));
+            /*            db.task(function* (t) {
+                            let usedPvf = JSON.stringify(yield t.one('SELECT get_pvf()'));
+                            let usedW = JSON.stringify(yield t.one('SELECT get_w()'));
+                            let usedKnn = JSON.stringify(yield t.one('SELECT get_knn_function_name()'));
+                            let usedKnnIn = JSON.stringify(yield t.one('SELECT get_knn_in_function_name()'));
+                            let usedKnnBatch = JSON.stringify(yield t.one('SELECT get_knn_batch_function_name()'));
+                            let usedAnalogy = JSON.stringify(yield t.one('SELECT get_analogy_function_name()'));
+                            let usedAnalogyIn = JSON.stringify(yield t.one('SELECT get_analogy_in_function_name()'));
+                            let usedGroups = JSON.stringify(yield t.one('SELECT get_groups_function_name()'));
 
-                console.log(`Current settings:
-                     PVF: ${usedPvf}
-                     W: ${usedW}
-                     kNN: ${usedKnn}
-                     kNN In: ${usedKnnIn}
-                     kNN Batch: ${usedKnnBatch}
-                     Analogy: ${usedAnalogy}
-                     Analogy In: ${usedAnalogyIn}
-                     Groups: ${usedGroups}`);
-            })
-                .then(function (data) {
-                })
-                .catch(function (err) {
-                    return next(err);
-                });*/
+                            console.log(`Current settings:
+                                 PVF: ${usedPvf}
+                                 W: ${usedW}
+                                 kNN: ${usedKnn}
+                                 kNN In: ${usedKnnIn}
+                                 kNN Batch: ${usedKnnBatch}
+                                 Analogy: ${usedAnalogy}
+                                 Analogy In: ${usedAnalogyIn}
+                                 Groups: ${usedGroups}`);
+                        })
+                            .then(function (data) {
+                            })
+                            .catch(function (err) {
+                                return next(err);
+                            });*/
         })
         .catch(function (err) {
             return next(err);
