@@ -284,11 +284,14 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     // Chart generation
     let chartExists = false;
-    $scope.noOfPerfQueries = 1;
-    $scope.perfKParam = 1000;
+
+    $scope.perfParams = {
+        noOfQueries: 1,
+        kParam: 1000
+    };
 
     $scope.updateChart = function () {
-        $http.get('/api/test_knn?query_number=' + $scope.noOfPerfQueries + '&k=' + $scope.perfKParam)
+        $http.get('/api/test_knn?query_number=' + $scope.perfParams.noOfQueries + '&k=' + $scope.perfParams.kParam)
             .then(function successCallback(response) {
                 // create chart if it doesn't exist yet
                 if (!chartExists) {
