@@ -16,7 +16,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     $scope.isSettingsCollapsed = true;
     $scope.isQueriesCollapsed = true;
 
-    $scope.schemaOptions = ['IMDb', 'Discogs'];
+    $scope.schemaOptions = ['IMDb', 'dblp', 'Discogs'];
     $scope.selectedSchema = $scope.schemaOptions[0];
     $scope.tables = {};
 
