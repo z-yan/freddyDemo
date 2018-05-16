@@ -231,8 +231,12 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
             let knnBatchDisable = $scope.selectedQuery.type === 'knn_batch';
 
-            if (analogyDisable || knnBatchDisable) {
+            if (analogyDisable) {
                 $scope.freddySettings.index = 'RAW';
+                return true;
+            }
+            else if (knnBatchDisable) {
+                $scope.freddySettings.index = 'IVFADC';
                 return true;
             }
         }

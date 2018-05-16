@@ -27,6 +27,31 @@
     }
   ],
   "discogs": [
+    {
+      "query": "SELECT * FROM knn_batch(ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist\nTABLESAMPLE system(0.1)), 5)",
+      "description": "Find 5 nearest neighbours for random artist names as a batch query",
+      "type": "knn_batch"
+    },
+    {
+      "query": "SELECT q.title, cosine_similarity(q.title, 'Unknown_Pleasures')\nFROM ((SELECT regexp_replace(title, ' ', '_', 'g') AS title FROM discogs.master WHERE 'Rock' = ANY(genres)) AS m\nINNER JOIN google_vecs ON google_vecs.word = m.title) AS q\nORDER BY cosine_similarity(title, 'Unknown_Pleasures') DESC LIMIT 10",
+      "description": "Find 10 most similar rock albums to Joy Division's \"Unknown Pleasures\"",
+      "type": "similarity"
+    },
+    {
+      "query": "SELECT ANN.word FROM knn_in('Beatles', 5, ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist)) AS ANN",
+      "description": "Artists similar to The Beatles",
+      "type": "knn_in"
+    },
+    {
+      "query": "SELECT title, ANN.word FROM discogs.master, knn(title, 5) AS ANN LIMIT 100",
+      "description": "Find keywords for albums",
+      "type": "knn"
+    },
+    {
+      "query": "SELECT token, grouptoken\nFROM groups(ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist TABLESAMPLE system(0.1)\nWHERE name NOT LIKE '%''%' LIMIT 1000), '{Classical,Rock,Pop,Electronic,Jazz,Blues,Hip-Hop,Reggae}')",
+      "description": "Artists by genres",
+      "type": "groups"
+    }
   ],
   "dblp": [
   ]
