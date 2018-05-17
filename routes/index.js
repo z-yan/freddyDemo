@@ -15,5 +15,6 @@ router.get('/api/tables', db.getTables);
 router.get('/api/custom_query', db.getCustomQuery);
 router.post('/api/settings', db.applySettings);
 router.get('/api/test_knn', db.testKnn);
+router.get('/api/prewarm', db.prewarm);
 
 module.exports = router;

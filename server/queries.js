@@ -253,14 +253,14 @@ function getCustomQuery(req, res, next) {
 
 // TODO switch between different word embeddings
 function applySettings(req, res, next) {
-/*
-    console.log(`Applying settings:
-                 Index: ${req.body.index}
-                 PV: ${req.body.pv}
-                 PV Factor: ${req.body.pvFactor}
-                 W Factor: ${req.body.wFactor}
-                 Analogy function: ${req.body.analogyType}`);
-*/
+    /*
+        console.log(`Applying settings:
+                     Index: ${req.body.index}
+                     PV: ${req.body.pv}
+                     PV Factor: ${req.body.pvFactor}
+                     W Factor: ${req.body.wFactor}
+                     Analogy function: ${req.body.analogyType}`);
+    */
 
     const index = req.body.index;
     const pv = req.body.pv;
@@ -445,6 +445,28 @@ function testKnn(req, res, next) {
         });
 }
 
+function prewarm(req, res, next) {
+    const indexTables = ['pq_codebook', 'pq_quantization', 'fine_quantization', 'coarse_quantization', 'residual_codebook'];
+
+    db.task(function* (t) {
+        let queries = [];
+
+        indexTables.forEach(function (value) {
+            queries.push(t.result('SELECT pg_prewarm($1)', value));
+        });
+
+        return t.batch(queries);
+    })
+        .then(function (data) {
+            res.status(200).json({
+                message: 'Executed prewarm successfully'
+            });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 module.exports = {
     getKeywordSimilarity: getKeywordSimilarity,
     getKnn: getKnn,
@@ -456,5 +478,6 @@ module.exports = {
     getTables: getTables,
     getCustomQuery: getCustomQuery,
     applySettings: applySettings,
-    testKnn: testKnn
+    testKnn: testKnn,
+    prewarm: prewarm
 };
