@@ -55,7 +55,7 @@
             </button>
 
             <uib-tabset>
-                <uib-tab index="0" heading="Queries">
+                <uib-tab index="0" heading="Queries" select="setActiveView('queries')">
                     <!-- Query picker and editor -->
                     <div class="btn-group btn-group-justified" style="margin-top: 3px;">
                         <div class="btn-group" uib-dropdown>
@@ -108,7 +108,7 @@
                     </uib-tabset>
                 </uib-tab>
 
-                <uib-tab index="1" heading="Performance">
+                <uib-tab index="1" heading="Performance" select="setActiveView('performance')">
                     <form class="form-inline" style="margin-top: 20px;">
                         <div class="form-group">
                             <label for="noOfPerfQueries">No. of queries:</label>
