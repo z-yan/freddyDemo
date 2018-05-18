@@ -266,8 +266,8 @@ function applySettings(req, res, next) {
     const pv = req.body.pv;
     const analogyType = req.body.analogyType;
 
-    const pvFactor = pv ? req.body.pvFactor : 1;
-    const wFactor = index === 'IVFADC' ? req.body.wFactor : 1;
+    const pvFactor = req.body.pvFactor;
+    const wFactor = req.body.wFactor;
 
     // Default RAW settings
     let knnFunction = 'k_nearest_neighbour';

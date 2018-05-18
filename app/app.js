@@ -279,6 +279,14 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.applySettings = function () {
+        if (!($scope.freddySettings.index === 'IVFADC')) {
+            $scope.freddySettings.wFactor = 1;
+        }
+
+        if (!$scope.freddySettings.pv) {
+            $scope.freddySettings.pvFactor = 1;
+        }
+
         $http({
             method: 'POST',
             url: '/api/settings',
