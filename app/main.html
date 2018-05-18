@@ -142,7 +142,7 @@
                 <form class="list-group">
                     <div class="list-group-item form-group">
                         <label>Choose index: <span class="glyphicon glyphicon-question-sign pull-right"
-                                                   uib-tooltip="Select accelerating index structure."></span></label>
+                                                   uib-tooltip="Select approximated search method."></span></label>
                         <div class="btn-group">
                             <label class="btn btn-primary" ng-model="freddySettings.index" ng-disabled="disableRaw()"
                                    uib-btn-radio="'RAW'">
@@ -162,14 +162,14 @@
 
                     <div class="list-group-item form-group" ng-show="freddySettings.index === 'IVFADC'">
                         <label>Set W Factor: <span class="glyphicon glyphicon-question-sign pull-right"
-                                                   uib-tooltip="A lower value provides better performance at the cost of precision."></span></label>
+                                                   uib-tooltip="Determines the number of nearest coarse quantization clusters considered for the search."></span></label>
                         <rzslider rz-slider-model="freddySettings.wFactor"
                                   rz-slider-options="wFacSliderOptions"></rzslider>
                     </div>
 
                     <div class="list-group-item form-group">
-                        <label>Choose analogy: <span class="glyphicon glyphicon-question-sign pull-right"
-                                                     uib-tooltip="Select analogy function implementation."></span></label>
+                        <label>Analogy type: <span class="glyphicon glyphicon-question-sign pull-right"
+                                                   uib-tooltip="Select method for answering analogy queries."></span></label>
                         <div class="btn-group" uib-dropdown>
                             <button id="analogy-button" type="button" class="btn btn-primary btn-block"
                                     uib-dropdown-toggle>
@@ -199,7 +199,7 @@
 
                     <div class="list-group-item form-group" ng-show="freddySettings.pv">
                         <label>Set PV factor: <span class="glyphicon glyphicon-question-sign pull-right"
-                                                    uib-tooltip="A higher value provides higher precision at the cost of performance."></span></label>
+                                                    uib-tooltip="Select multiplicative of k for the amount of results considered for post-verification."></span></label>
                         <rzslider rz-slider-model="freddySettings.pvFactor"
                                   rz-slider-options="pvFacSliderOptions"></rzslider>
                     </div>

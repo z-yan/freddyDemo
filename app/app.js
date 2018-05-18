@@ -58,8 +58,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         // default settings
         index: 'RAW',
         pv: false,
-        pvFactor: 20,
-        wFactor: 3,
+        pvFactor: 1,
+        wFactor: 1,
         analogyType: 'analogy_3cosadd'
     };
 
