@@ -26,7 +26,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.indexOptions = ['RAW', 'PQ', 'IVFADC'];
 
-    $scope.vecsOptions = ['Google News'];
+    $scope.vecsOptions = ['Google News', 'Wikidata', 'GloVe'];
     $scope.selectedVecs = $scope.vecsOptions[0];
 
     $scope.analogyOptions = [{
@@ -300,6 +300,15 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
         $scope.freddySettings = Object.assign({}, defaultFreddySettings);
         $scope.applySettings();
+    };
+
+    $scope.prewarm = function () {
+        $http.get('/api/prewarm')
+            .then(function successCallback() {
+
+            }, function errorCallback() {
+
+            });
     };
 
     // Chart generation
