@@ -1,12 +1,12 @@
 {
   "imdb": [
     {
-      "query": "SELECT title, director\nFROM imdb.title, analogy('Godfather', 'Francis_Ford_Coppola', title) AS director\nWHERE director != ''\nLIMIT 100",
+      "query": "SELECT DISTINCT title, director\nFROM imdb.title_top250, analogy('Godfather', 'Francis_Ford_Coppola', title) AS director\nWHERE director != ''\nLIMIT 100",
       "description": "Directors of movies",
       "type": "analogy"
     },
     {
-      "query": "SELECT token, grouptoken\nFROM groups(ARRAY(SELECT regexp_replace(title, ' ', '_', 'g') FROM imdb.title\nWHERE title NOT LIKE '%''%' LIMIT 1000), '{Europe,America}')",
+      "query": "SELECT token, grouptoken\nFROM groups(ARRAY(SELECT regexp_replace(title, ' ', '_', 'g') FROM imdb.title_top250\nWHERE title NOT LIKE '%''%' LIMIT 1000), '{Europe,America}')",
       "description": "Movies by continents",
       "type": "groups"
     },
@@ -16,34 +16,34 @@
       "type": "similarity"
     },
     {
-      "query": "SELECT title, ANN.word FROM imdb.title, knn(title.title, 5) AS ANN LIMIT 100",
+      "query": "SELECT DISTINCT title, ANN.word FROM imdb.title_top250, knn(title, 5) AS ANN LIMIT 100",
       "description": "Get tags for movies",
       "type": "knn"
     },
     {
-      "query": "SELECT ANN.word FROM knn_in('Godfather', 5, ARRAY(SELECT title::varchar(80) FROM imdb.title)) AS ANN",
+      "query": "SELECT ANN.word FROM knn_in('Godfather', 5, ARRAY(SELECT title::varchar(80) FROM imdb.title_top250)) AS ANN",
       "description": "Movies similar to \"Godfather\"",
       "type": "knn_in"
     }
   ],
   "discogs": [
     {
-      "query": "SELECT * FROM knn_batch(ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist\nTABLESAMPLE system(0.1)), 5)",
+      "query": "SELECT * FROM knn_batch(ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist\n\tTABLESAMPLE system(0.1)), 5)",
       "description": "Find 5 nearest neighbours for random artist names as a batch query",
       "type": "knn_batch"
     },
     {
-      "query": "SELECT q.title, cosine_similarity(q.title, 'Unknown_Pleasures')\nFROM ((SELECT regexp_replace(title, ' ', '_', 'g') AS title FROM discogs.master WHERE 'Rock' = ANY(genres)) AS m\nINNER JOIN google_vecs ON google_vecs.word = m.title) AS q\nORDER BY cosine_similarity(title, 'Unknown_Pleasures') DESC LIMIT 10",
-      "description": "Find 10 most similar rock albums to Joy Division's \"Unknown Pleasures\"",
+      "query": "SELECT DISTINCT q.title, cosine_similarity(q.title, 'Purple_Rain')\nFROM ((SELECT regexp_replace(title, ' ', '_', 'g') AS title FROM discogs.master WHERE 'Pop' = ANY(genres)) AS m\nINNER JOIN google_vecs ON google_vecs.word = m.title) AS q\nORDER BY cosine_similarity(title, 'Purple_Rain') DESC LIMIT 20",
+      "description": "Find 20 most similar pop releases to Prince's \"Purple Rain\"",
       "type": "similarity"
     },
     {
-      "query": "SELECT ANN.word FROM knn_in('Beatles', 5, ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist)) AS ANN",
-      "description": "Artists similar to The Beatles",
+      "query": "SELECT * FROM knn_in('Beatles', 20, ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist WHERE profile ILIKE '%band%'))\nORDER BY similarity DESC",
+      "description": "Bands similar to The Beatles",
       "type": "knn_in"
     },
     {
-      "query": "SELECT title, ANN.word FROM discogs.master, knn(title, 5) AS ANN LIMIT 100",
+      "query": "SELECT title, ANN.word FROM discogs.master TABLESAMPLE system(0.1), knn(regexp_replace(title, ' ', '_', 'g'), 5) AS ANN LIMIT 100",
       "description": "Find keywords for albums",
       "type": "knn"
     },
