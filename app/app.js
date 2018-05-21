@@ -165,6 +165,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         let queryParam = $scope.currQuery.replace(/\n/g, " ");
         // replace % with %25 to avoid request parsing problems
         queryParam = queryParam.replace(/%/g, "%25");
+        // replace tabs with spaces
+        queryParam = queryParam.replace(/\t/g, " ");
 
         $http.get('/api/custom_query?query=' + queryParam)
             .then(function successCallback(response) {
@@ -211,7 +213,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.setVecs = function (vecs) {
-        // TODO: apply setting to FREDDY
+        // TODO: apply selected word embeddings to FREDDY via init function
         $scope.selectedVecs = vecs;
     };
 
@@ -241,8 +243,9 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
             let knnBatchDisable = $scope.selectedQuery.type === 'knn_batch';
             let pqActive = $scope.freddySettings.index === 'PQ';
+            let similarityDisable = $scope.selectedQuery.type === 'similarity';
 
-            if (analogyDisable) {
+            if (analogyDisable || similarityDisable) {
                 if (pqActive) {
                     $scope.freddySettings.index = 'RAW';
                 }
@@ -266,8 +269,9 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             let analogyInDisable = $scope.selectedQuery.type === 'analogy_in';
             let groupsDisable = $scope.selectedQuery.type === 'groups';
             let ivfadcActive = $scope.freddySettings.index === 'IVFADC';
+            let similarityDisable = $scope.selectedQuery.type === 'similarity';
 
-            if (analogyDisable || knnInDisable || analogyInDisable || groupsDisable) {
+            if (analogyDisable || knnInDisable || analogyInDisable || groupsDisable || similarityDisable) {
                 if (ivfadcActive) {
                     $scope.freddySettings.index = 'RAW';
                 }
