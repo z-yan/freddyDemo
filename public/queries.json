@@ -54,6 +54,11 @@
     }
   ],
   "dblp": [
+    {
+      "query": "",
+      "description": "Custom dblp query",
+      "type": "custom"
+    }
   ]
 }
 
