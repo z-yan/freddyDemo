@@ -429,8 +429,15 @@ function testKnn(req, res, next) {
 
             // calculate average duration
             let durationValues = [];
-            data.forEach(function (value) {
-                durationValues.push(value.duration);
+            data.forEach(function (value, index) {
+                let duration = index == 0 ? value.duration : value.duration - data[index - 1].duration;
+
+/*                console.log("Execution time for query " + index + ": " + duration / 1000 + " s");
+                if (index == data.length - 1) {
+                    console.log("Total execution time: " + value.duration / 1000 + " s");
+                }*/
+
+                durationValues.push(duration);
             });
             let avgDuration = arrayAvg(durationValues);
 
