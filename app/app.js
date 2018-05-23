@@ -67,6 +67,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.activeView = 'queries';
 
+    $scope.currError = null;
+
     function createEditor() {
         editorTextArea = document.getElementById('queryTextArea');
         queryEditor = CodeMirror.fromTextArea(editorTextArea, {
@@ -200,6 +202,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
             }, function errorCallback(response) {
                 console.log('Failed to execute query:\n' + JSON.stringify(response.data.error));
+                $scope.currError = response.data.error;
             });
     };
 
@@ -481,6 +484,10 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
             }, function errorCallback(response) {
                 console.log('Unable to update chart.');
             });
+    };
+
+    $scope.closeError = function () {
+        $scope.currError = null;
     };
 
     $scope.selectSchema($scope.selectedSchema);

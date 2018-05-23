@@ -246,7 +246,7 @@ function getCustomQuery(req, res, next) {
         .catch(function (error) {
             res.status(500)
                 .json({
-                    error: error
+                    error: error.message
                 });
         });
 }

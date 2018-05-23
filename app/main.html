@@ -83,6 +83,10 @@
                         <textarea id="queryTextArea"></textarea>
                     </div>
 
+                    <div uib-alert class="alert-danger" close="closeError()" ng-hide="currError == null"><b>Query
+                        execution failed:</b> {{ currError }}
+                    </div>
+
                     <!-- Query results table -->
                     <uib-tabset ng-show="currResultsTable != null">
                         <uib-tab index="0" heading="Current results" select="updateEditor(currQuery)">
