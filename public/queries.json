@@ -1,7 +1,7 @@
 {
   "imdb": [
     {
-      "query": "SELECT DISTINCT title, director\nFROM imdb.title_top250, analogy('Godfather', 'Francis_Ford_Coppola', title) AS director\nWHERE director != ''\nLIMIT 100",
+      "query": "SELECT DISTINCT title, director\nFROM imdb.title_top250, analogy('Godfather', 'Francis_Ford_Coppola', regexp_replace(title, ' ', '_', 'g')) AS director\nWHERE director != ''\nLIMIT 100",
       "description": "Directors of movies",
       "type": "analogy"
     },
@@ -16,12 +16,12 @@
       "type": "similarity"
     },
     {
-      "query": "SELECT DISTINCT title, ANN.word FROM imdb.title_top250, knn(title, 5) AS ANN LIMIT 100",
+      "query": "SELECT DISTINCT title, ANN.word FROM imdb.title_top250, knn(regexp_replace(title, ' ', '_', 'g'), 5) AS ANN\nORDER BY title\nLIMIT 100",
       "description": "Get tags for movies",
       "type": "knn"
     },
     {
-      "query": "SELECT ANN.word FROM knn_in('Godfather', 5, ARRAY(SELECT title::varchar(80) FROM imdb.title_top250)) AS ANN",
+      "query": "SELECT ANN.word FROM knn_in('Godfather', 5, ARRAY(SELECT regexp_replace(title, ' ', '_', 'g') FROM imdb.title_top250)) AS ANN",
       "description": "Movies similar to \"Godfather\"",
       "type": "knn_in"
     }
@@ -43,12 +43,12 @@
       "type": "knn_in"
     },
     {
-      "query": "SELECT title, ANN.word FROM discogs.master TABLESAMPLE system(0.1), knn(regexp_replace(title, ' ', '_', 'g'), 5) AS ANN LIMIT 100",
+      "query": "SELECT title, ANN.word FROM discogs.master TABLESAMPLE system(0.1), knn(regexp_replace(title, ' ', '_', 'g'), 5) AS ANN\nORDER BY title\nLIMIT 100",
       "description": "Find keywords for albums",
       "type": "knn"
     },
     {
-      "query": "SELECT token, grouptoken\nFROM groups(ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist TABLESAMPLE system(0.1)\nWHERE name NOT LIKE '%''%' LIMIT 1000), '{Classical,Rock,Pop,Electronic,Jazz,Blues,Hip-Hop,Reggae}')",
+      "query": "SELECT token, grouptoken\nFROM groups(ARRAY(SELECT regexp_replace(name, ' ', '_', 'g') FROM discogs.artist TABLESAMPLE system(0.1)\nWHERE name NOT LIKE '%''%' LIMIT 1000), '{Classical,Rock,Pop,Electronic,Jazz,Blues,Hip-Hop,Reggae}')\nORDER BY token",
       "description": "Artists by genres",
       "type": "groups"
     }
