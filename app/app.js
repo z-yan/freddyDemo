@@ -26,8 +26,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.indexOptions = ['RAW', 'PQ', 'IVFADC'];
 
-    $scope.vecsOptions = ['Google News', 'Wikidata', 'GloVe'];
-    $scope.selectedVecs = $scope.vecsOptions[0];
+    $scope.weOptions = ['Google News', 'Wikidata', 'GloVe'];
 
     $scope.analogyOptions = [{
         name: '3CosAdd',
@@ -60,7 +59,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         pv: false,
         pvFactor: 1,
         wFactor: 1,
-        analogyType: 'analogy_3cosadd'
+        analogyType: 'analogy_3cosadd',
+        we: 'Google News'
     };
 
     $scope.freddySettings = Object.assign({}, defaultFreddySettings);
@@ -215,9 +215,9 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
         }
     };
 
-    $scope.setVecs = function (vecs) {
-        // TODO: apply selected word embeddings to FREDDY via init function
-        $scope.selectedVecs = vecs;
+    $scope.setWe = function (we) {
+        $scope.freddySettings.we = we;
+        $scope.applySettings();
     };
 
     $scope.setAnalogy = function (analogy, analogyName) {

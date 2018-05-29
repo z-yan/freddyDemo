@@ -30,7 +30,6 @@ FREDDY UDFs:
  * @param {string} keyword - Keyword to find similarities for.
  * @param {int} results - Number of results.
  */
-// TODO use other tables than keywords?
 function getKeywordSimilarity(req, res, next) {
     let keyword = req.query.keyword;
     let results = parseInt(req.query.results);
@@ -251,7 +250,6 @@ function getCustomQuery(req, res, next) {
         });
 }
 
-// TODO switch between different word embeddings
 function applySettings(req, res, next) {
     /*
         console.log(`Applying settings:
@@ -269,6 +267,8 @@ function applySettings(req, res, next) {
     const pvFactor = req.body.pvFactor;
     const wFactor = req.body.wFactor;
 
+    const wordEmbeddings = req.body.we;
+
     // Default RAW settings
     let knnFunction = 'k_nearest_neighbour';
     let knnInFunction = 'knn_in_exact';
@@ -278,6 +278,46 @@ function applySettings(req, res, next) {
     let analogyInFunction = 'analogy_3cosadd_in';
     let groupsFunction = 'grouping_func';
 
+    // Word embeddings table names
+    let original;
+    let normalized;
+    let pq_quantization;
+    let codebook;
+    let residual_quantization;
+    let coarse_quantization;
+    let residual_codebook;
+
+    switch (wordEmbeddings) {
+        case 'Google News':
+            original = 'google_vecs';
+            normalized = 'google_vecs_norm';
+            pq_quantization = 'pq_quantization';
+            codebook = 'pq_codebook';
+            residual_quantization = 'fine_quantization';
+            coarse_quantization = 'coarse_quantization';
+            residual_codebook = 'residual_codebook';
+            break;
+        case 'Wikidata':
+            original = 'we_export.wiki_vecs';
+            normalized = 'we_export.wiki_vecs_norm';
+            pq_quantization = 'we_export.pq_quantization_wiki';
+            codebook = 'we_export.pq_codebook_wiki';
+            residual_quantization = 'we_export.fine_quantization_wiki';
+            coarse_quantization = 'we_export.coarse_quantization_wiki';
+            residual_codebook = 'we_export.residual_codebook_wiki';
+            break;
+        case 'GloVe':
+            original = 'we_export.glove_vecs';
+            normalized = 'we_export.glove_vecs_norm';
+            pq_quantization = 'we_export.pq_quantization_glove';
+            codebook = 'we_export.pq_codebook_glove';
+            residual_quantization = 'we_export.fine_quantization_glove';
+            coarse_quantization = 'we_export.coarse_quantization_glove';
+            residual_codebook = 'we_export.residual_codebook_glove';
+            break;
+    }
+
+    // Set indexed functions
     switch (index) {
         case 'PQ':
             knnFunction = pv ? 'k_nearest_neighbour_pq_pv' : 'k_nearest_neighbour_pq';
@@ -310,7 +350,11 @@ function applySettings(req, res, next) {
         const q7 = t.any('SELECT set_analogy_in_function($1)', analogyInFunction);
         const q8 = t.any('SELECT set_groups_function($1)', groupsFunction);
 
-        return t.batch([q1, q2, q3, q4, q5, q6, q7, q8]);
+        // apply word embeddings settings
+        const q9 = t.any('SELECT init($1, $2, $3, $4, $5, $6, $7)', [original, normalized, pq_quantization,
+            codebook, residual_quantization, coarse_quantization, residual_codebook]);
+
+        return t.batch([q1, q2, q3, q4, q5, q6, q7, q8, q9]);
     })
         .then(function (data) {
             res.status(200)
@@ -432,10 +476,10 @@ function testKnn(req, res, next) {
             data.forEach(function (value, index) {
                 let duration = index == 0 ? value.duration : value.duration - data[index - 1].duration;
 
-/*                console.log("Execution time for query " + index + ": " + duration / 1000 + " s");
-                if (index == data.length - 1) {
-                    console.log("Total execution time: " + value.duration / 1000 + " s");
-                }*/
+                /*                console.log("Execution time for query " + index + ": " + duration / 1000 + " s");
+                                if (index == data.length - 1) {
+                                    console.log("Total execution time: " + value.duration / 1000 + " s");
+                                }*/
 
                 durationValues.push(duration);
             });

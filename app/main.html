@@ -17,11 +17,11 @@
 
                 <div class="btn-group" uib-dropdown uib-tooltip="Select word embeddings">
                     <button id="vecs-button" type="button" class="btn btn-warning btn-block" uib-dropdown-toggle>
-                        {{ selectedVecs }} <span class="caret"></span>
+                        {{ freddySettings.we }} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="vecs-button">
-                        <li role="menuitem" ng-repeat="vecs in vecsOptions" ng-click="setVecs(vecs)">
-                            <a href="#">{{ vecs }}</a>
+                        <li role="menuitem" ng-repeat="we in weOptions" ng-click="setWe(we)">
+                            <a href="#">{{ we }}</a>
                         </li>
                     </ul>
                 </div>
