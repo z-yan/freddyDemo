@@ -14,3 +14,5 @@ Installation instructions
 4. Run the web application server:
 
         $ npm start
+
+The application server listens on port 3000 by default.
