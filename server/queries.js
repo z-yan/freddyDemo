@@ -11,7 +11,7 @@ const pgMonitor = require('pg-monitor');
 pgMonitor.attach(options, ['query', 'error']);
 
 const dbConfiguration = {
-    host: 'localhost',
+    host: '141.76.47.127',
     port: 5432,
     database: 'demo_database',
     user: 'demo_user',
