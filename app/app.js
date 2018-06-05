@@ -26,7 +26,7 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
 
     $scope.indexOptions = ['RAW', 'PQ', 'IVFADC'];
 
-    $scope.weOptions = ['Google News', 'Wikidata', 'GloVe'];
+    $scope.weOptions = ['Google News', 'Wikipedia', 'GloVe'];
 
     $scope.analogyOptions = [{
         name: '3CosAdd',

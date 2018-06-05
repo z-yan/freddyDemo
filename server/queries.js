@@ -297,7 +297,7 @@ function applySettings(req, res, next) {
             coarse_quantization = 'coarse_quantization';
             residual_codebook = 'residual_codebook';
             break;
-        case 'Wikidata':
+        case 'Wikipedia':
             original = 'we_export.wiki_vecs';
             normalized = 'we_export.wiki_vecs_norm';
             pq_quantization = 'we_export.pq_quantization_wiki';
