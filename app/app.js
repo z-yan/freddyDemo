@@ -185,12 +185,17 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                 $scope.currCols = [];
 
                 angular.forEach($scope.currQueryResult[0], function (value, key) {
-                    $scope.currCols.push({
+                    let newCol = {
                         title: key,
                         field: key,
                         sortable: key,
+                        filter: {},
                         show: true
-                    });
+                    };
+
+                    newCol.filter[key] = 'text';
+
+                    $scope.currCols.push(newCol);
                 });
 
                 $scope.currResultsTable = new NgTableParams({

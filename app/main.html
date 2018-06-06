@@ -91,7 +91,7 @@
                     <uib-tabset ng-show="currResultsTable != null">
                         <uib-tab index="0" heading="Current results" select="updateEditor(currQuery)">
                             <table ng-table-dynamic="currResultsTable with currCols"
-                                   class="table table-striped table-hover">
+                                   class="table table-striped table-hover" show-filter="true">
                                 <tr ng-repeat="row in $data">
                                     <td ng-repeat="col in $columns">{{::row[col.field]}}</td>
                                 </tr>
