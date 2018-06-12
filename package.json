@@ -1,6 +1,6 @@
 {
   "name": "freddydemo",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -18,5 +18,7 @@
     "nodemon": "~1.17.3",
     "pg-monitor": "^1.0.0",
     "pg-promise": "~8.2.2"
-  }
+  },
+  "license": "MIT",
+  "author": "Zdravko Yanakiev <zdravko.yanakiev@gmail.com>"
 }
