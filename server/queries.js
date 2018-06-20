@@ -487,7 +487,8 @@ function testKnn(req, res, next) {
 
             res.status(200).json({
                     avgPrecision: avgPrecision,
-                    avgDuration: avgDuration
+                    avgDuration: avgDuration,
+                    totalDuration: data[data.length - 1].duration
                 }
             );
         })

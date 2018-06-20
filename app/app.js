@@ -156,6 +156,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.executeQuery = function () {
+        let startTime = new Date().getTime();
+
         if (!(JSON.stringify($scope.freddySettings) === JSON.stringify($scope.appliedSettings))) {
             $scope.applySettings();
         }
@@ -205,6 +207,11 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                     dataset: $scope.currQueryResult
                 });
 
+                let requestTime = new Date().getTime() - startTime;
+                let executionTime = response.data.duration;
+
+                console.log("Request time: " + requestTime + " ms.");
+                console.log("Execution time: " + executionTime + " ms.");
             }, function errorCallback(response) {
                 console.log('Failed to execute query:\n' + JSON.stringify(response.data.error));
                 $scope.currError = response.data.error;
@@ -340,6 +347,8 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
     };
 
     $scope.updateChart = function () {
+        let startTime = new Date().getTime();
+
         $http.get('/api/test_knn?query_number=' + $scope.perfParams.noOfQueries + '&k=' + $scope.perfParams.kParam)
             .then(function successCallback(response) {
                 // create chart if it doesn't exist yet
@@ -486,6 +495,12 @@ freddyDemo.controller('MainController', ['$scope', '$http', 'NgTableParams', fun
                         [`marker.opacity[${lastIndex}`]: 1
                     }, traceIndex);
                 }
+
+                let requestTime = new Date().getTime() - startTime;
+                let executionTime = response.data.totalDuration;
+
+                console.log("Request time: " + requestTime + " ms.");
+                console.log("Execution time: " + executionTime + " ms.");
             }, function errorCallback(response) {
                 console.log('Unable to update chart.');
             });
