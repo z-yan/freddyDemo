@@ -15,4 +15,4 @@ Installation instructions
 
         $ npm start
 
-The application server listens on port 3000 by default.
+The application server listens on port 3000 by default. To add new predefined queries to the front end, edit `public/queries.json`.
