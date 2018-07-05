@@ -3,7 +3,7 @@ Installation instructions
 
 1. Clone this repository:
 
-        $ git clone https://github.com/z-yan/freddyDemo.git
+        $ git clone https://gitlab.com/yanakiev/freddyDemo.git
 2. Install the Node dependencies via npm:
 
         $ cd freddyDemo
