@@ -11,7 +11,7 @@
       "type": "groups"
     },
     {
-      "query": "SELECT keyword, cosine_similarity(keyword, 'comedy') FROM imdb.keyword AS k\nINNER JOIN google_vecs ON google_vecs.word = k.keyword\nORDER BY cosine_similarity(keyword, 'comedy') DESC LIMIT 10",
+      "query": "SELECT keyword, cosine_similarity(keyword, 'comedy') FROM imdb.keyword AS k\nWHERE cosine_similarity(keyword, 'comedy') > 0\nORDER BY cosine_similarity(keyword, 'comedy')\nDESC LIMIT 10",
       "description": "Keywords similar to comedy",
       "type": "similarity"
     },
@@ -33,7 +33,7 @@
       "type": "knn_batch"
     },
     {
-      "query": "SELECT DISTINCT q.title, cosine_similarity(q.title, 'Purple_Rain')\nFROM ((SELECT regexp_replace(title, ' ', '_', 'g') AS title FROM discogs.master WHERE 'Pop' = ANY(genres)) AS m\nINNER JOIN google_vecs ON google_vecs.word = m.title) AS q\nORDER BY cosine_similarity(title, 'Purple_Rain') DESC LIMIT 20",
+      "query": "SELECT DISTINCT m.title, cosine_similarity(m.title, 'Purple_Rain')\nFROM (SELECT regexp_replace(title, ' ', '_', 'g') AS title FROM discogs.master WHERE 'Pop' = ANY(genres)) AS m\nWHERE cosine_similarity(m.title, 'Purple_Rain') > 0\nORDER BY cosine_similarity(m.title, 'Purple_Rain') DESC\nLIMIT 20",
       "description": "Find 20 most similar pop releases to Prince's \"Purple Rain\"",
       "type": "similarity"
     },
